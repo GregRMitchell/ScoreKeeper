@@ -1,0 +1,12 @@
+{
+  "id": "tikal",
+  "name": "Tikal",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "rounds",
+  "scoring": "highest",
+  "rounds": {
+    "label": "Scoring",
+    "maxRounds": 4
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "port-royal",
+  "name": "Port Royal",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "Victory Points",
+      "type": "number",
+      "min": 0,
+      "max": 15
+    }
+  ]
+}

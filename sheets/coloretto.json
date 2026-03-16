@@ -1,0 +1,40 @@
+{
+  "id": "coloretto",
+  "name": "Coloretto",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "Color Group 1",
+      "type": "number",
+      "min": 0,
+      "max": 21
+    },
+    {
+      "name": "Color Group 2",
+      "type": "number",
+      "min": 0,
+      "max": 21
+    },
+    {
+      "name": "Color Group 3",
+      "type": "number",
+      "min": 0,
+      "max": 21
+    },
+    {
+      "name": "Penalty Colors",
+      "type": "number",
+      "min": -27,
+      "max": 0
+    },
+    {
+      "name": "Rainbow Jokers",
+      "type": "number",
+      "min": 0,
+      "max": 9
+    }
+  ]
+}

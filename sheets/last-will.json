@@ -1,0 +1,16 @@
+{
+  "id": "last-will",
+  "name": "Last Will",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "lowest",
+  "categories": [
+    {
+      "name": "Money Remaining",
+      "type": "number",
+      "min": -10,
+      "max": 100
+    }
+  ]
+}

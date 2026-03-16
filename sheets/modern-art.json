@@ -1,0 +1,20 @@
+{
+  "id": "modern-art",
+  "name": "Modern Art",
+  "minPlayers": 3,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "Auction Proceeds",
+      "type": "number",
+      "min": 0
+    },
+    {
+      "name": "Painting Collection Value",
+      "type": "number",
+      "min": 0
+    }
+  ]
+}

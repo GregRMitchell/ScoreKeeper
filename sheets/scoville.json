@@ -1,0 +1,40 @@
+{
+  "id": "scoville",
+  "name": "Scoville",
+  "minPlayers": 2,
+  "maxPlayers": 6,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "Market Cards",
+      "type": "number",
+      "min": 0,
+      "max": 40
+    },
+    {
+      "name": "Recipe Cards",
+      "type": "number",
+      "min": 0,
+      "max": 80
+    },
+    {
+      "name": "Award Plaques",
+      "type": "number",
+      "min": 0,
+      "max": 30
+    },
+    {
+      "name": "Bonus Action Tiles",
+      "type": "number",
+      "min": 0,
+      "max": 20
+    },
+    {
+      "name": "Coins (÷3)",
+      "type": "number",
+      "min": 0,
+      "max": 15
+    }
+  ]
+}

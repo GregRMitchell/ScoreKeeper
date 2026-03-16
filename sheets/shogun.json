@@ -1,0 +1,12 @@
+{
+  "id": "shogun",
+  "name": "Shogun",
+  "minPlayers": 3,
+  "maxPlayers": 5,
+  "style": "rounds",
+  "scoring": "highest",
+  "rounds": {
+    "label": "Year",
+    "maxRounds": 2
+  }
+}

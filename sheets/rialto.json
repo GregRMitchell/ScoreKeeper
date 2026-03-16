@@ -1,0 +1,40 @@
+{
+  "id": "rialto",
+  "name": "Rialto",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "District Points",
+      "type": "number",
+      "min": 0,
+      "max": 36
+    },
+    {
+      "name": "Gondolier Bonus",
+      "type": "number",
+      "min": 0,
+      "max": 15
+    },
+    {
+      "name": "Merchant Bonus",
+      "type": "number",
+      "min": 0,
+      "max": 15
+    },
+    {
+      "name": "Doge VP",
+      "type": "number",
+      "min": 0,
+      "max": 10
+    },
+    {
+      "name": "Coins (÷3)",
+      "type": "number",
+      "min": 0,
+      "max": 6
+    }
+  ]
+}

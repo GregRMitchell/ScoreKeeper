@@ -1,0 +1,46 @@
+{
+  "id": "homesteaders",
+  "name": "Homesteaders",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "Building VP",
+      "type": "number",
+      "min": 0,
+      "max": 50
+    },
+    {
+      "name": "Town Hall Advances",
+      "type": "number",
+      "min": 0,
+      "max": 15
+    },
+    {
+      "name": "Railroad Advances",
+      "type": "number",
+      "min": 0,
+      "max": 15
+    },
+    {
+      "name": "Gold",
+      "type": "number",
+      "min": 0,
+      "max": 20
+    },
+    {
+      "name": "Resources",
+      "type": "number",
+      "min": 0,
+      "max": 10
+    },
+    {
+      "name": "Debt (−1 each)",
+      "type": "number",
+      "min": -15,
+      "max": 0
+    }
+  ]
+}

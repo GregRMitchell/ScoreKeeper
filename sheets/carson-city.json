@@ -1,0 +1,34 @@
+{
+  "id": "carson-city",
+  "name": "Carson City",
+  "minPlayers": 2,
+  "maxPlayers": 6,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "Buildings",
+      "type": "number",
+      "min": 0,
+      "max": 60
+    },
+    {
+      "name": "Territories",
+      "type": "number",
+      "min": 0,
+      "max": 20
+    },
+    {
+      "name": "Gold",
+      "type": "number",
+      "min": 0,
+      "max": 30
+    },
+    {
+      "name": "Cash (÷10)",
+      "type": "number",
+      "min": 0,
+      "max": 10
+    }
+  ]
+}

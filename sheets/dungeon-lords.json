@@ -1,0 +1,52 @@
+{
+  "id": "dungeon-lords",
+  "name": "Dungeon Lords",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "Dungeon Rooms",
+      "type": "number",
+      "min": 0,
+      "max": 25
+    },
+    {
+      "name": "Monsters",
+      "type": "number",
+      "min": 0,
+      "max": 20
+    },
+    {
+      "name": "Traps",
+      "type": "number",
+      "min": 0,
+      "max": 15
+    },
+    {
+      "name": "Gold (÷2)",
+      "type": "number",
+      "min": 0,
+      "max": 8
+    },
+    {
+      "name": "Imps",
+      "type": "number",
+      "min": 0,
+      "max": 5
+    },
+    {
+      "name": "Evil Track Bonus",
+      "type": "number",
+      "min": 0,
+      "max": 5
+    },
+    {
+      "name": "Penalties",
+      "type": "number",
+      "min": -15,
+      "max": 0
+    }
+  ]
+}

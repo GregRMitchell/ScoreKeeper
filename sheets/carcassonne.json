@@ -1,0 +1,40 @@
+{
+  "id": "carcassonne",
+  "name": "Carcassonne",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "Cities",
+      "type": "number",
+      "min": 0,
+      "max": 100
+    },
+    {
+      "name": "Roads",
+      "type": "number",
+      "min": 0,
+      "max": 50
+    },
+    {
+      "name": "Monasteries",
+      "type": "number",
+      "min": 0,
+      "max": 81
+    },
+    {
+      "name": "Farms",
+      "type": "number",
+      "min": 0,
+      "max": 100
+    },
+    {
+      "name": "Incomplete Features",
+      "type": "number",
+      "min": 0,
+      "max": 30
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "loony-quest",
+  "name": "Loony Quest",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "style": "rounds",
+  "scoring": "highest",
+  "rounds": {
+    "label": "Level",
+    "maxRounds": 9
+  }
+}

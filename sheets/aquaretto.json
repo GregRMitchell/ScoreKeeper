@@ -1,0 +1,40 @@
+{
+  "id": "aquaretto",
+  "name": "Aquaretto",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "Tank Points",
+      "type": "number",
+      "min": 0,
+      "max": 50
+    },
+    {
+      "name": "Trainer / Breeder Bonuses",
+      "type": "number",
+      "min": 0,
+      "max": 20
+    },
+    {
+      "name": "Customer Cards",
+      "type": "number",
+      "min": 0,
+      "max": 20
+    },
+    {
+      "name": "Overflow Penalty",
+      "type": "number",
+      "min": -10,
+      "max": 0
+    },
+    {
+      "name": "Coins",
+      "type": "number",
+      "min": 0,
+      "max": 20
+    }
+  ]
+}

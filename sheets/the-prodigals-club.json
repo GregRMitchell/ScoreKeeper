@@ -1,0 +1,28 @@
+{
+  "id": "the-prodigals-club",
+  "name": "The Prodigals Club",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "Election (votes spent)",
+      "type": "number",
+      "min": 0,
+      "max": 15
+    },
+    {
+      "name": "High Society (prestige disposed)",
+      "type": "number",
+      "min": 0,
+      "max": 15
+    },
+    {
+      "name": "Travel Club (points accumulated)",
+      "type": "number",
+      "min": 0,
+      "max": 15
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "aton",
+  "name": "Aton",
+  "minPlayers": 2,
+  "maxPlayers": 2,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "Temple Areas Controlled",
+      "type": "number",
+      "min": 0,
+      "max": 8
+    }
+  ]
+}

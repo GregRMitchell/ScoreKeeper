@@ -1,0 +1,22 @@
+{
+  "id": "tobago",
+  "name": "Tobago",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "Treasure Gold",
+      "type": "number",
+      "min": 0,
+      "max": 40
+    },
+    {
+      "name": "Amulet Bonus",
+      "type": "number",
+      "min": 0,
+      "max": 10
+    }
+  ]
+}

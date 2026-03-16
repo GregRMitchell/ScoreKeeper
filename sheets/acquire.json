@@ -1,0 +1,50 @@
+{
+  "id": "acquire",
+  "name": "Acquire",
+  "minPlayers": 2,
+  "maxPlayers": 6,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "Luxor Bonus",
+      "type": "number",
+      "min": 0
+    },
+    {
+      "name": "Tower Bonus",
+      "type": "number",
+      "min": 0
+    },
+    {
+      "name": "American Bonus",
+      "type": "number",
+      "min": 0
+    },
+    {
+      "name": "Festival Bonus",
+      "type": "number",
+      "min": 0
+    },
+    {
+      "name": "Worldwide Bonus",
+      "type": "number",
+      "min": 0
+    },
+    {
+      "name": "Continental Bonus",
+      "type": "number",
+      "min": 0
+    },
+    {
+      "name": "Imperial Bonus",
+      "type": "number",
+      "min": 0
+    },
+    {
+      "name": "Cash",
+      "type": "number",
+      "min": 0
+    }
+  ]
+}

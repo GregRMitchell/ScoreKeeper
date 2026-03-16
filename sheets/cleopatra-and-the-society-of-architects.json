@@ -1,0 +1,22 @@
+{
+  "id": "cleopatra-and-the-society-of-architects",
+  "name": "Cleopatra and the Society of Architects",
+  "minPlayers": 3,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    {
+      "name": "Corruption Amulets",
+      "type": "number",
+      "min": 0,
+      "max": 20
+    },
+    {
+      "name": "Talents",
+      "type": "number",
+      "min": 0,
+      "max": 120
+    }
+  ]
+}

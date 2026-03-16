@@ -1,35 +1,297 @@
 [
-  { "id": "7-wonders",        "name": "7 Wonders",           "style": "categories" },
-  { "id": "catan",            "name": "Catan",              "style": "categories" },
-  { "id": "ticket-to-ride",  "name": "Ticket to Ride",     "style": "categories" },
-  { "id": "wingspan",         "name": "Wingspan",            "style": "categories" },
-  { "id": "terraforming-mars","name": "Terraforming Mars",  "style": "categories" },
-  { "id": "yahtzee",          "name": "Yahtzee",             "style": "categories" },
-  { "id": "king-of-tokyo",    "name": "King of Tokyo",       "style": "categories" },
-  { "id": "keyflower",        "name": "Keyflower",           "style": "categories" },
-  { "id": "scrabble",         "name": "Scrabble",            "style": "rounds"     },
-  { "id": "hearts",           "name": "Hearts",              "style": "rounds"     },
-  { "id": "uno",              "name": "Uno",                 "style": "rounds"     },
-  { "id": "codenames",          "name": "Codenames",           "style": "rounds"     },
-  { "id": "merchants-marauders", "name": "Merchants & Marauders", "style": "categories" },
-  { "id": "bohnanza",            "name": "Bohnanza",              "style": "categories" },
-  { "id": "power-grid-deluxe",  "name": "Power Grid Deluxe",    "style": "categories" }
-,
-  { "id": "crokinole",          "name": "Crokinole",             "style": "rounds"     },
-  { "id": "in-year-of-dragon", "name": "In the Year of the Dragon", "style": "categories" },
-  { "id": "glory-to-rome",    "name": "Glory to Rome",             "style": "categories" },
-  { "id": "dominion",         "name": "Dominion",                  "style": "categories" },
-  { "id": "the-castles-of-burgundy", "name": "The Castles of Burgundy", "style": "categories" },
-  { "id": "caverna-the-cave-farmers", "name": "Caverna: The Cave Farmers", "style": "categories" },
-  { "id": "galaxy-trucker", "name": "Galaxy Trucker", "style": "rounds" },
-  { "id": "bora-bora", "name": "Bora Bora", "style": "categories" },
-  { "id": "orleans", "name": "Orléans", "style": "categories" },
-  { "id": "san-juan", "name": "San Juan", "style": "categories" },
-  { "id": "dixit", "name": "Dixit", "style": "rounds" },
-  { "id": "takenoko", "name": "Takenoko", "style": "categories" },
-  { "id": "alien-frontiers", "name": "Alien Frontiers", "style": "categories" },
-  { "id": "kingsburg", "name": "Kingsburg", "style": "categories" },
-  { "id": "wits-wagers", "name": "Wits & Wagers", "style": "rounds" },
-  { "id": "wizard", "name": "Wizard", "style": "rounds" },
-  { "id": "zooloretto", "name": "Zooloretto", "style": "categories" }
+  {
+    "id": "7-wonders",
+    "name": "7 Wonders",
+    "style": "categories"
+  },
+  {
+    "style": "categories",
+    "id": "acquire",
+    "name": "Acquire"
+  },
+  {
+    "id": "alien-frontiers",
+    "name": "Alien Frontiers",
+    "style": "categories"
+  },
+  {
+    "style": "categories",
+    "id": "aquaretto",
+    "name": "Aquaretto"
+  },
+  {
+    "style": "categories",
+    "id": "aquasphere",
+    "name": "AquaSphere"
+  },
+  {
+    "style": "categories",
+    "id": "aton",
+    "name": "Aton"
+  },
+  {
+    "id": "bohnanza",
+    "name": "Bohnanza",
+    "style": "categories"
+  },
+  {
+    "id": "bora-bora",
+    "name": "Bora Bora",
+    "style": "categories"
+  },
+  {
+    "style": "categories",
+    "id": "carcassonne",
+    "name": "Carcassonne"
+  },
+  {
+    "style": "categories",
+    "id": "carson-city",
+    "name": "Carson City"
+  },
+  {
+    "id": "catan",
+    "name": "Catan",
+    "style": "categories"
+  },
+  {
+    "id": "caverna-the-cave-farmers",
+    "name": "Caverna: The Cave Farmers",
+    "style": "categories"
+  },
+  {
+    "id": "cleopatra-and-the-society-of-architects",
+    "name": "Cleopatra and the Society of Architects",
+    "style": "categories"
+  },
+  {
+    "id": "codenames",
+    "name": "Codenames",
+    "style": "rounds"
+  },
+  {
+    "style": "categories",
+    "id": "coloretto",
+    "name": "Coloretto"
+  },
+  {
+    "style": "categories",
+    "id": "copycat",
+    "name": "Copycat"
+  },
+  {
+    "style": "categories",
+    "id": "council-of-verona",
+    "name": "Council of Verona"
+  },
+  {
+    "id": "crokinole",
+    "name": "Crokinole",
+    "style": "rounds"
+  },
+  {
+    "id": "dixit",
+    "name": "Dixit",
+    "style": "rounds"
+  },
+  {
+    "id": "dominion",
+    "name": "Dominion",
+    "style": "categories"
+  },
+  {
+    "style": "categories",
+    "id": "dungeon-lords",
+    "name": "Dungeon Lords"
+  },
+  {
+    "style": "categories",
+    "id": "fairy-tale",
+    "name": "Fairy Tale"
+  },
+  {
+    "id": "galaxy-trucker",
+    "name": "Galaxy Trucker",
+    "style": "rounds"
+  },
+  {
+    "id": "glory-to-rome",
+    "name": "Glory to Rome",
+    "style": "categories"
+  },
+  {
+    "style": "categories",
+    "id": "ground-floor",
+    "name": "Ground Floor"
+  },
+  {
+    "id": "hearts",
+    "name": "Hearts",
+    "style": "rounds"
+  },
+  {
+    "style": "categories",
+    "id": "homesteaders",
+    "name": "Homesteaders"
+  },
+  {
+    "style": "categories",
+    "id": "hyperborea",
+    "name": "Hyperborea"
+  },
+  {
+    "id": "in-year-of-dragon",
+    "name": "In the Year of the Dragon",
+    "style": "categories"
+  },
+  {
+    "id": "keyflower",
+    "name": "Keyflower",
+    "style": "categories"
+  },
+  {
+    "id": "king-of-tokyo",
+    "name": "King of Tokyo",
+    "style": "categories"
+  },
+  {
+    "id": "kingsburg",
+    "name": "Kingsburg",
+    "style": "categories"
+  },
+  {
+    "style": "categories",
+    "id": "last-will",
+    "name": "Last Will"
+  },
+  {
+    "style": "rounds",
+    "id": "loony-quest",
+    "name": "Loony Quest"
+  },
+  {
+    "id": "merchants-marauders",
+    "name": "Merchants & Marauders",
+    "style": "categories"
+  },
+  {
+    "style": "categories",
+    "id": "modern-art",
+    "name": "Modern Art"
+  },
+  {
+    "id": "orleans",
+    "name": "Orléans",
+    "style": "categories"
+  },
+  {
+    "style": "categories",
+    "id": "port-royal",
+    "name": "Port Royal"
+  },
+  {
+    "id": "power-grid-deluxe",
+    "name": "Power Grid Deluxe",
+    "style": "categories"
+  },
+  {
+    "style": "categories",
+    "id": "power-grid-the-first-sparks",
+    "name": "Power Grid: The First Sparks"
+  },
+  {
+    "style": "categories",
+    "id": "rialto",
+    "name": "Rialto"
+  },
+  {
+    "id": "san-juan",
+    "name": "San Juan",
+    "style": "categories"
+  },
+  {
+    "style": "categories",
+    "id": "scoville",
+    "name": "Scoville"
+  },
+  {
+    "id": "scrabble",
+    "name": "Scrabble",
+    "style": "rounds"
+  },
+  {
+    "style": "rounds",
+    "id": "shogun",
+    "name": "Shogun"
+  },
+  {
+    "style": "categories",
+    "id": "smash-up",
+    "name": "Smash Up"
+  },
+  {
+    "id": "takenoko",
+    "name": "Takenoko",
+    "style": "categories"
+  },
+  {
+    "id": "terraforming-mars",
+    "name": "Terraforming Mars",
+    "style": "categories"
+  },
+  {
+    "id": "the-castles-of-burgundy",
+    "name": "The Castles of Burgundy",
+    "style": "categories"
+  },
+  {
+    "style": "categories",
+    "id": "the-prodigals-club",
+    "name": "The Prodigals Club"
+  },
+  {
+    "id": "ticket-to-ride",
+    "name": "Ticket to Ride",
+    "style": "categories"
+  },
+  {
+    "style": "rounds",
+    "id": "tikal",
+    "name": "Tikal"
+  },
+  {
+    "style": "categories",
+    "id": "tobago",
+    "name": "Tobago"
+  },
+  {
+    "id": "uno",
+    "name": "Uno",
+    "style": "rounds"
+  },
+  {
+    "id": "wingspan",
+    "name": "Wingspan",
+    "style": "categories"
+  },
+  {
+    "id": "wits-wagers",
+    "name": "Wits & Wagers",
+    "style": "rounds"
+  },
+  {
+    "id": "wizard",
+    "name": "Wizard",
+    "style": "rounds"
+  },
+  {
+    "id": "yahtzee",
+    "name": "Yahtzee",
+    "style": "categories"
+  },
+  {
+    "id": "zooloretto",
+    "name": "Zooloretto",
+    "style": "categories"
+  }
 ]
