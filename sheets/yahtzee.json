@@ -1,0 +1,25 @@
+{
+  "id": "yahtzee",
+  "name": "Yahtzee",
+  "minPlayers": 1,
+  "maxPlayers": 8,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Aces",          "type": "number",  "min": 0, "max": 5  },
+    { "name": "Twos",          "type": "number",  "min": 0, "max": 10 },
+    { "name": "Threes",        "type": "number",  "min": 0, "max": 15 },
+    { "name": "Fours",         "type": "number",  "min": 0, "max": 20 },
+    { "name": "Fives",         "type": "number",  "min": 0, "max": 25 },
+    { "name": "Sixes",         "type": "number",  "min": 0, "max": 30 },
+    { "name": "Upper Bonus",   "type": "boolean", "value": 35 },
+    { "name": "3 of a Kind",   "type": "number",  "min": 0, "max": 30 },
+    { "name": "4 of a Kind",   "type": "number",  "min": 0, "max": 30 },
+    { "name": "Full House",    "type": "boolean", "value": 25 },
+    { "name": "Sm. Straight",  "type": "boolean", "value": 30 },
+    { "name": "Lg. Straight",  "type": "boolean", "value": 40 },
+    { "name": "YAHTZEE",       "type": "boolean", "value": 50 },
+    { "name": "Chance",        "type": "number",  "min": 0, "max": 30 },
+    { "name": "YAHTZEE Bonus", "type": "number",  "min": 0 }
+  ]
+}

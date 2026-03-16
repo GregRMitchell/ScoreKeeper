@@ -1,0 +1,9 @@
+{
+  "id": "uno",
+  "name": "Uno",
+  "minPlayers": 2,
+  "maxPlayers": 10,
+  "style": "rounds",
+  "scoring": "lowest",
+  "rounds": { "label": "Round", "maxRounds": null }
+}

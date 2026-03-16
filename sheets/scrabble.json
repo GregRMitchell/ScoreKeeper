@@ -1,0 +1,9 @@
+{
+  "id": "scrabble",
+  "name": "Scrabble",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "rounds",
+  "scoring": "highest",
+  "rounds": { "label": "Turn", "maxRounds": null }
+}

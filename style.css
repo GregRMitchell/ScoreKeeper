@@ -1,0 +1,619 @@
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  --bg:               #f0f4f0;
+  --bg-card:          #ffffff;
+  --text:             #1a1a2e;
+  --text-muted:       #667;
+  --border:           #d0d7d0;
+  --primary:          #2d6a4f;
+  --primary-dark:     #1b4332;
+  --primary-text:     #ffffff;
+  --danger:           #c0392b;
+  --danger-dark:      #962d22;
+  --accent:           #f4a261;
+  --leader-bg:        #d4f4e2;
+  --leader-text:      #1b4332;
+  --chip-bg:          #e8f4ee;
+  --chip-sel-bg:      #2d6a4f;
+  --chip-sel-text:    #ffffff;
+  --badge-categories: #3a86ff;
+  --badge-rounds:     #c77dff;
+  --shadow:           0 2px 8px rgba(0,0,0,0.10);
+  --shadow-card:      0 2px 12px rgba(0,0,0,0.08);
+  --radius:           10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:            #0d1520;
+    --bg-card:       #172030;
+    --text:          #e2eaf2;
+    --text-muted:    #7a9ab8;
+    --border:        #273d55;
+    --primary:       #4ade80;
+    --primary-dark:  #22c55e;
+    --primary-text:  #0d1520;
+    --danger:        #f87171;
+    --danger-dark:   #ef4444;
+    --leader-bg:     #14352a;
+    --leader-text:   #6ee09e;
+    --chip-bg:       #1a2e40;
+    --chip-sel-bg:   #4ade80;
+    --chip-sel-text: #0d1520;
+    --shadow:        0 2px 8px rgba(0,0,0,0.40);
+    --shadow-card:   0 2px 12px rgba(0,0,0,0.30);
+  }
+}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+#app {
+  max-width: 700px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ============================================================
+   APP HEADER
+   ============================================================ */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  background: var(--primary);
+  color: var(--primary-text);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: var(--shadow);
+}
+
+.header-title  { font-size: 1.1rem; font-weight: 700; }
+.header-spacer { width: 2.5rem; flex-shrink: 0; }
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background 0.15s, opacity 0.15s, transform 0.1s;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.5; pointer-events: none; }
+
+.btn-primary   { background: var(--primary); color: var(--primary-text); }
+.btn-primary:hover { background: var(--primary-dark); }
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+.btn-secondary:hover { background: var(--chip-bg); }
+
+.btn-danger    { background: var(--danger);  color: #fff; }
+.btn-danger:hover { background: var(--danger-dark); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--border);
+}
+.btn-ghost:hover { background: var(--border); }
+
+.btn-full { width: 100%; }
+.btn-sm   { padding: 0.35rem 0.75rem; font-size: 0.85rem; min-height: 36px; }
+
+.btn-icon {
+  background: transparent;
+  border: none;
+  color: var(--primary-text);
+  font-size: 1.25rem;
+  cursor: pointer;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-icon:hover { background: rgba(255,255,255,0.15); }
+
+.btn-icon-sm {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.2rem 0.35rem;
+  border-radius: 4px;
+  min-height: 32px;
+  min-width: 32px;
+  color: var(--text-muted);
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-icon-sm:hover { background: var(--border); color: var(--text); }
+.btn-remove:hover  { color: var(--danger); }
+
+/* Import label acts like a button */
+.import-label { cursor: pointer; }
+
+/* ============================================================
+   BACKUP ROW (home screen)
+   ============================================================ */
+.backup-row {
+  display: flex;
+  gap: 0.6rem;
+}
+.backup-btn {
+  flex: 1;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card-label    { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.card-title    { font-size: 1.4rem; font-weight: 700; }
+.card-subtitle { font-size: 0.9rem; color: var(--text-muted); }
+
+/* ============================================================
+   INPUTS
+   ============================================================ */
+.input-text {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.85rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--text);
+  font-size: 0.95rem;
+  min-height: 44px;
+  transition: border-color 0.15s;
+}
+.input-text:focus { outline: none; border-color: var(--primary); }
+
+/* ============================================================
+   HOME VIEW
+   ============================================================ */
+.view-home { justify-content: center; }
+
+.home-logo {
+  font-size: 3.5rem;
+  text-align: center;
+  line-height: 1;
+}
+
+/* ============================================================
+   BROWSE VIEW
+   ============================================================ */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  min-height: 2.5rem;
+}
+
+.offline-badge { font-size: 0.85rem; color: var(--accent); font-weight: 500; }
+.loading-text  { font-size: 0.9rem;  color: var(--text-muted); }
+
+.error-msg {
+  color: var(--danger);
+  font-size: 0.9rem;
+  padding: 0.6rem 0.75rem;
+  border-left: 3px solid var(--danger);
+  background: rgba(192, 57, 43, 0.08);
+  border-radius: 0 6px 6px 0;
+}
+
+.sheet-list { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.browse-section { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.browse-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.browse-section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.sheet-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+  border: 2px solid transparent;
+  transition: border-color 0.15s, transform 0.1s;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.sheet-card:hover  { border-color: var(--primary); }
+.sheet-card:active { transform: scale(0.98); }
+.sheet-card.loading { opacity: 0.6; pointer-events: none; }
+
+.sheet-name  { font-weight: 600; font-size: 1rem; }
+.sheet-badge {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 99px;
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+.badge-categories { background: var(--badge-categories); }
+.badge-rounds     { background: var(--badge-rounds); }
+
+/* ============================================================
+   SETUP VIEW
+   ============================================================ */
+.setup-section { display: flex; flex-direction: column; gap: 0.75rem; }
+.setup-section h2 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.player-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; min-height: 2.5rem; }
+
+.chip {
+  padding: 0.4rem 0.85rem;
+  border-radius: 99px;
+  border: 2px solid var(--primary);
+  background: var(--chip-bg);
+  color: var(--primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 500;
+  transition: background 0.12s, color 0.12s;
+  min-height: 36px;
+  -webkit-tap-highlight-color: transparent;
+}
+.chip-selected {
+  background: var(--chip-sel-bg);
+  color: var(--chip-sel-text);
+  border-color: var(--chip-sel-bg);
+}
+.chip-count {
+  font-size: 0.7rem;
+  opacity: 0.65;
+  font-weight: 400;
+}
+
+.adhoc-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.adhoc-row label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.adhoc-row input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.selected-players { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+
+.selected-player-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+}
+
+.player-name    { font-weight: 500; }
+.player-actions { display: flex; gap: 0.2rem; align-items: center; }
+.setup-footer   { padding-top: 0.25rem; }
+
+/* ============================================================
+   GAME VIEW — SCORE TABLE
+   ============================================================ */
+.view-game { padding: 0; gap: 0; }
+
+.score-table {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+
+.score-row {
+  display: grid;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.score-row:last-child { border-bottom: none; }
+
+.score-header .score-cell {
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.7rem 0.5rem;
+  background: var(--bg-card);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.score-cell {
+  padding: 0.45rem 0.5rem;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cell-label {
+  text-align: left;
+  padding-left: 0.75rem;
+  font-weight: 500;
+  color: var(--text);
+}
+.cell-player { font-weight: 600; font-size: 0.9rem; }
+.cell-total  { font-weight: 700; font-size: 1.05rem; }
+.cell-action { padding: 0.2rem 0.3rem; text-align: center; }
+
+.leader {
+  background: var(--leader-bg) !important;
+  color: var(--leader-text) !important;
+  border-radius: 4px;
+}
+
+.score-totals {
+  background: var(--bg);
+  border-top: 2px solid var(--border);
+}
+.score-totals .score-cell { font-weight: 700; }
+
+.score-input {
+  width: 100%;
+  max-width: 5.5rem;
+  padding: 0.3rem 0.35rem;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.95rem;
+  text-align: center;
+  min-height: 36px;
+  transition: border-color 0.15s;
+}
+.score-input:focus { outline: none; border-color: var(--primary); }
+
+.score-checkbox {
+  width: 1.2rem;
+  height: 1.2rem;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+.bool-value { font-size: 0.72rem; color: var(--text-muted); margin-left: 0.2rem; }
+
+.game-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 1rem;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+}
+
+/* ============================================================
+   RESULTS VIEW
+   ============================================================ */
+.view-results { align-items: stretch; }
+
+.winner-banner {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: var(--primary-text);
+  border-radius: 14px;
+  padding: 2rem 1.5rem 1.75rem;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+}
+.winner-trophy { font-size: 3rem; line-height: 1; }
+.winner-name   { font-size: 1.6rem; font-weight: 800; margin-top: 0.5rem; }
+.winner-label  { font-size: 0.9rem; opacity: 0.8; margin-top: 0.2rem; }
+
+.scoreboard { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+
+.scoreboard-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 0.85rem 1.25rem;
+  box-shadow: var(--shadow-card);
+  border: 2px solid transparent;
+}
+.scoreboard-winner { border-color: var(--primary); }
+
+.sb-rank  { font-size: 0.85rem; color: var(--text-muted); width: 1.5rem; flex-shrink: 0; }
+.sb-name  { flex: 1; font-weight: 600; }
+.sb-score { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
+
+.results-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+/* ============================================================
+   HISTORY LIST VIEW
+   ============================================================ */
+.view-history { gap: 0.6rem; }
+
+.history-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border: 2px solid transparent;
+  transition: border-color 0.15s;
+}
+
+.history-card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.history-game-name {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.history-date {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.history-winner {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.history-summary {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.history-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+}
+
+/* ============================================================
+   HISTORY DETAIL VIEW
+   ============================================================ */
+.history-detail-meta {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  padding: 0.75rem 1rem 0;
+}
+
+/* ============================================================
+   PLAYERS VIEW
+   ============================================================ */
+.player-add-row { display: flex; gap: 0.5rem; }
+
+.players-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+
+.player-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-card);
+  border-radius: 8px;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--border);
+}
+
+.player-item-name {
+  flex: 1;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline dotted var(--text-muted);
+  text-underline-offset: 3px;
+}
+.player-item-name:hover { color: var(--primary); }
+.player-item-plays { font-size: 0.8rem; color: var(--text-muted); flex-shrink: 0; }
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.hint {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 0.5rem 0;
+}

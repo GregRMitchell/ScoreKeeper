@@ -1,0 +1,13 @@
+[
+  { "id": "catan",            "name": "Catan",              "style": "categories" },
+  { "id": "ticket-to-ride",  "name": "Ticket to Ride",     "style": "categories" },
+  { "id": "wingspan",         "name": "Wingspan",            "style": "categories" },
+  { "id": "terraforming-mars","name": "Terraforming Mars",  "style": "categories" },
+  { "id": "yahtzee",          "name": "Yahtzee",             "style": "categories" },
+  { "id": "king-of-tokyo",    "name": "King of Tokyo",       "style": "categories" },
+  { "id": "keyflower",        "name": "Keyflower",           "style": "categories" },
+  { "id": "scrabble",         "name": "Scrabble",            "style": "rounds"     },
+  { "id": "hearts",           "name": "Hearts",              "style": "rounds"     },
+  { "id": "uno",              "name": "Uno",                 "style": "rounds"     },
+  { "id": "codenames",        "name": "Codenames",           "style": "rounds"     }
+]

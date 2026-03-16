@@ -1,0 +1,9 @@
+{
+  "id": "hearts",
+  "name": "Hearts",
+  "minPlayers": 4,
+  "maxPlayers": 4,
+  "style": "rounds",
+  "scoring": "lowest",
+  "rounds": { "label": "Hand", "maxRounds": null }
+}

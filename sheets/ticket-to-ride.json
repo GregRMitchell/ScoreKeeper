@@ -1,0 +1,14 @@
+{
+  "id": "ticket-to-ride",
+  "name": "Ticket to Ride",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Route Points",           "type": "number",  "min": 0 },
+    { "name": "Completed Tickets",      "type": "number",  "min": 0 },
+    { "name": "Incomplete Tickets (−)", "type": "number",  "max": 0 },
+    { "name": "Globetrotter Bonus",     "type": "boolean", "value": 10 }
+  ]
+}

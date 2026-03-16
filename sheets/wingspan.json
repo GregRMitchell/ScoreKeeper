@@ -1,0 +1,16 @@
+{
+  "id": "wingspan",
+  "name": "Wingspan",
+  "minPlayers": 1,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Birds",              "type": "number", "min": 0, "max": 100 },
+    { "name": "Bonus Cards",        "type": "number", "min": 0, "max": 25  },
+    { "name": "End-of-Round Goals", "type": "number", "min": 0, "max": 20  },
+    { "name": "Eggs",               "type": "number", "min": 0, "max": 30  },
+    { "name": "Food on Cards",      "type": "number", "min": 0, "max": 15  },
+    { "name": "Tucked Cards",       "type": "number", "min": 0, "max": 25  }
+  ]
+}

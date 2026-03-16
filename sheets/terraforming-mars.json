@@ -1,0 +1,16 @@
+{
+  "id": "terraforming-mars",
+  "name": "Terraforming Mars",
+  "minPlayers": 1,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Terraform Rating", "type": "number", "min": 20, "max": 63  },
+    { "name": "Milestones",       "type": "number", "min": 0,  "max": 15  },
+    { "name": "Awards",           "type": "number", "min": 0,  "max": 15  },
+    { "name": "Greenery Tiles",   "type": "number", "min": 0,  "max": 23  },
+    { "name": "City Tiles",       "type": "number", "min": 0,  "max": 30  },
+    { "name": "Card VPs",         "type": "number", "min": 0,  "max": 100 }
+  ]
+}

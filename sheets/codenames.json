@@ -1,0 +1,9 @@
+{
+  "id": "codenames",
+  "name": "Codenames",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "style": "rounds",
+  "scoring": "highest",
+  "rounds": { "label": "Round", "maxRounds": null }
+}
