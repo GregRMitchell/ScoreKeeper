@@ -299,7 +299,21 @@ main {
 .sheet-card:active { transform: scale(0.98); }
 .sheet-card.loading { opacity: 0.6; pointer-events: none; }
 
+.sheet-card-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  flex: 1;
+}
+
 .sheet-name  { font-weight: 600; font-size: 1rem; }
+
+.sheet-plays {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
 .sheet-badge {
   font-size: 0.72rem;
   padding: 0.2rem 0.6rem;

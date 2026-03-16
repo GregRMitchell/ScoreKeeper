@@ -196,6 +196,14 @@ function deleteHistoryEntry(id) {
   saveHistory(getHistory().filter(r => r.id !== id));
 }
 
+function getSheetPlayCounts() {
+  const counts = {};
+  getHistory().forEach(r => {
+    counts[r.sheetId] = (counts[r.sheetId] || 0) + 1;
+  });
+  return counts;
+}
+
 // --- Custom Sheets ---
 
 function getCustomSheets() {
@@ -228,7 +236,10 @@ async function fetchSheetsIndex() {
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const builtIn = await res.json();
   const custom = getCustomSheets().map(s => ({ id: s.id, name: s.name, style: s.style, custom: true }));
-  return [...builtIn, ...custom].sort((a, b) => a.name.localeCompare(b.name));
+  const counts  = getSheetPlayCounts();
+  return [...builtIn, ...custom]
+    .map(s => ({ ...s, plays: counts[s.id] || 0 }))
+    .sort((a, b) => b.plays - a.plays || a.name.localeCompare(b.name));
 }
 
 async function fetchSheet(id) {
@@ -491,7 +502,14 @@ registerView('browse', () => {
 
   function buildCard(entry, container) {
     const card = el('div', { class: 'sheet-card', role: 'button', tabindex: '0' });
-    card.appendChild(el('span', { class: 'sheet-name' }, entry.name));
+
+    const cardMain = el('div', { class: 'sheet-card-main' });
+    cardMain.appendChild(el('span', { class: 'sheet-name' }, entry.name));
+    if (entry.plays > 0) {
+      cardMain.appendChild(el('span', { class: 'sheet-plays' },
+        `${entry.plays} play${entry.plays !== 1 ? 's' : ''}`));
+    }
+    card.appendChild(cardMain);
 
     const cardRight = el('div', { class: 'sheet-card-right' });
     cardRight.appendChild(el('span', {
