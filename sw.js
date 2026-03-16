@@ -3,7 +3,7 @@
    Cache-first for all local assets including sheet definitions.
    ============================================================ */
 
-const CACHE_NAME = 'scorekeeper-v4';
+const CACHE_NAME = 'scorekeeper-v5';
 const APP_SHELL  = [
   './',
   './index.html',
