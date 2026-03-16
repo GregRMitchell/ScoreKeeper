@@ -512,9 +512,6 @@ registerView('browse', () => {
     card.appendChild(cardMain);
 
     const cardRight = el('div', { class: 'sheet-card-right' });
-    cardRight.appendChild(el('span', {
-      class: `sheet-badge badge-${entry.custom ? 'custom' : entry.style}`,
-    }, entry.custom ? 'custom' : entry.style));
 
     if (entry.custom) {
       cardRight.appendChild(el('button', {
