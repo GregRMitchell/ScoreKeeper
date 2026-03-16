@@ -544,15 +544,35 @@ registerView('browse', () => {
     type: 'button', class: 'btn btn-secondary',
     onclick: () => navigate('game-builder'),
   }, '＋ Create Custom Game');
+
+  const filterInput = el('input', {
+    type: 'search', class: 'input-text browse-filter',
+    placeholder: '🔍 Filter games…', 'aria-label': 'Filter games',
+  });
+
   const sheetList = el('div', { class: 'sheet-list' });
 
+  let allEntries = [];
+  const renderList = () => {
+    const q = filterInput.value.trim().toLowerCase();
+    sheetList.innerHTML = '';
+    const visible = q ? allEntries.filter(e => e.name.toLowerCase().includes(q)) : allEntries;
+    if (visible.length === 0) {
+      sheetList.appendChild(el('p', { class: 'hint' }, 'No games match your search.'));
+    } else {
+      visible.forEach(entry => buildCard(entry, sheetList));
+    }
+  };
+  filterInput.addEventListener('input', renderList);
+
   section.appendChild(status);
+  section.appendChild(filterInput);
   section.appendChild(createBtn);
   section.appendChild(sheetList);
   main.appendChild(section);
 
   fetchSheetsIndex()
-    .then(index => index.forEach(entry => buildCard(entry, sheetList)))
+    .then(index => { allEntries = index; renderList(); })
     .catch(err => {
       status.appendChild(el('div', { class: 'error-msg' },
         el('strong', {}, '⚠ Could not load sheets.'),

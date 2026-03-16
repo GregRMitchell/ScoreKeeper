@@ -264,9 +264,12 @@ main {
 
 .sheet-list { display: flex; flex-direction: column; gap: 0.6rem; }
 
-.browse-section { display: flex; flex-direction: column; gap: 0.6rem; }
+.browse-filter {
+  width: 100%;
+  font-size: 1rem;
+}
 
-.browse-section-header {
+.browse-section { display: flex; flex-direction: column; gap: 0.6rem; }
   display: flex;
   align-items: center;
   justify-content: space-between;
