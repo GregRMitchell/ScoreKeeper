@@ -1,0 +1,13 @@
+{
+  "id": "alien-frontiers",
+  "name": "Alien Frontiers",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Colonies", "type": "number", "min": 0, "max": 12 },
+    { "name": "Territory Control", "type": "number", "min": 0, "max": 8 },
+    { "name": "Alien Tech Cards", "type": "number", "min": 0, "max": 5 }
+  ]
+}

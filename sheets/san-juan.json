@@ -1,0 +1,14 @@
+{
+  "id": "san-juan",
+  "name": "San Juan",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Production Buildings", "type": "number", "min": 0, "max": 30 },
+    { "name": "Violet Buildings", "type": "number", "min": 0, "max": 60 },
+    { "name": "Monuments", "type": "number", "min": 0, "max": 30 },
+    { "name": "Special Bonuses", "type": "number", "min": 0, "max": 40 }
+  ]
+}

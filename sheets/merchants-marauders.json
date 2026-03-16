@@ -1,0 +1,17 @@
+{
+  "id": "merchants-marauders",
+  "name": "Merchants & Marauders",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Combat Victories",     "type": "number", "min": 0, "max": 10 },
+    { "name": "Profitable Trade",     "type": "number", "min": 0, "max": 10 },
+    { "name": "Merchant Raids",       "type": "number", "min": 0, "max": 10 },
+    { "name": "Missions Completed",   "type": "number", "min": 0, "max": 10 },
+    { "name": "Rumors Confirmed",     "type": "number", "min": 0, "max": 10 },
+    { "name": "Grand Ship Purchased", "type": "boolean", "value": 1 },
+    { "name": "Stashed Gold (÷10)",   "type": "number", "min": 0, "max": 10 }
+  ]
+}

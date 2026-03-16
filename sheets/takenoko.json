@@ -1,0 +1,14 @@
+{
+  "id": "takenoko",
+  "name": "Takenoko",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Plot Objectives", "type": "number", "min": 0, "max": 50 },
+    { "name": "Gardener Objectives", "type": "number", "min": 0, "max": 60 },
+    { "name": "Panda Objectives", "type": "number", "min": 0, "max": 50 },
+    { "name": "Emperor Card", "type": "number", "min": 0, "max": 2 }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "stone-age",
+  "name": "Stone Age",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Buildings",               "type": "number", "min": 0 },
+    { "name": "Culture Cards",           "type": "number", "min": 0 },
+    { "name": "Farmers × Farm Track",    "type": "number", "min": 0 },
+    { "name": "Tool Makers × Tool Value","type": "number", "min": 0 },
+    { "name": "Builders × Buildings",    "type": "number", "min": 0 },
+    { "name": "Shamans × People",        "type": "number", "min": 0 },
+    { "name": "Leftover Resources",      "type": "number", "min": 0 }
+  ]
+}

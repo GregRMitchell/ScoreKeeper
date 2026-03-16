@@ -1,0 +1,17 @@
+{
+  "id": "7-wonders",
+  "name": "7 Wonders",
+  "minPlayers": 2,
+  "maxPlayers": 7,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Military",   "type": "number", "min": -6,  "max": 18  },
+    { "name": "Treasury",   "type": "number", "min": 0,   "max": 14  },
+    { "name": "Wonders",    "type": "number", "min": 0,   "max": 20  },
+    { "name": "Civilian",   "type": "number", "min": 0,   "max": 40  },
+    { "name": "Science",    "type": "number", "min": 0,   "max": 70  },
+    { "name": "Commercial", "type": "number", "min": 0,   "max": 30  },
+    { "name": "Guilds",     "type": "number", "min": 0,   "max": 30  }
+  ]
+}

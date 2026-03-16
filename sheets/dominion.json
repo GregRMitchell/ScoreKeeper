@@ -1,0 +1,16 @@
+{
+  "id": "dominion",
+  "name": "Dominion",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Provinces", "type": "number", "min": 0, "max": 72 },
+    { "name": "Duchies",   "type": "number", "min": 0, "max": 36 },
+    { "name": "Estates",   "type": "number", "min": 0, "max": 12 },
+    { "name": "Curses",    "type": "number", "min": -30, "max": 0 },
+    { "name": "Gardens",   "type": "number", "min": 0, "max": 72 },
+    { "name": "Other VP",  "type": "number", "min": -20, "max": 30 }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "puerto-rico",
+  "name": "Puerto Rico",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Shipping VP",           "type": "number", "min": 0, "max": 75 },
+    { "name": "Building VP",           "type": "number", "min": 0, "max": 32 },
+    { "name": "Large Building Bonus",  "type": "number", "min": 0, "max": 22 }
+  ]
+}

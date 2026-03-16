@@ -1,0 +1,9 @@
+{
+  "id": "wizard",
+  "name": "Wizard",
+  "minPlayers": 3,
+  "maxPlayers": 6,
+  "style": "rounds",
+  "scoring": "highest",
+  "rounds": { "label": "Round", "maxRounds": null }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "glory-to-rome",
+  "name": "Glory to Rome",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Influence", "type": "number", "min": 0, "max": 35 },
+    { "name": "Vault", "type": "number", "min": 0, "max": 90 },
+    { "name": "Majority Bonuses", "type": "number", "min": 0, "max": 18 }
+  ]
+}

@@ -1,4 +1,5 @@
 [
+  { "id": "7-wonders",        "name": "7 Wonders",           "style": "categories" },
   { "id": "catan",            "name": "Catan",              "style": "categories" },
   { "id": "ticket-to-ride",  "name": "Ticket to Ride",     "style": "categories" },
   { "id": "wingspan",         "name": "Wingspan",            "style": "categories" },
@@ -9,5 +10,26 @@
   { "id": "scrabble",         "name": "Scrabble",            "style": "rounds"     },
   { "id": "hearts",           "name": "Hearts",              "style": "rounds"     },
   { "id": "uno",              "name": "Uno",                 "style": "rounds"     },
-  { "id": "codenames",        "name": "Codenames",           "style": "rounds"     }
+  { "id": "codenames",          "name": "Codenames",           "style": "rounds"     },
+  { "id": "merchants-marauders", "name": "Merchants & Marauders", "style": "categories" },
+  { "id": "bohnanza",            "name": "Bohnanza",              "style": "categories" },
+  { "id": "power-grid-deluxe",  "name": "Power Grid Deluxe",    "style": "categories" }
+,
+  { "id": "crokinole",          "name": "Crokinole",             "style": "rounds"     },
+  { "id": "in-year-of-dragon", "name": "In the Year of the Dragon", "style": "categories" },
+  { "id": "glory-to-rome",    "name": "Glory to Rome",             "style": "categories" },
+  { "id": "dominion",         "name": "Dominion",                  "style": "categories" },
+  { "id": "the-castles-of-burgundy", "name": "The Castles of Burgundy", "style": "categories" },
+  { "id": "caverna-the-cave-farmers", "name": "Caverna: The Cave Farmers", "style": "categories" },
+  { "id": "galaxy-trucker", "name": "Galaxy Trucker", "style": "rounds" },
+  { "id": "bora-bora", "name": "Bora Bora", "style": "categories" },
+  { "id": "orleans", "name": "Orléans", "style": "categories" },
+  { "id": "san-juan", "name": "San Juan", "style": "categories" },
+  { "id": "dixit", "name": "Dixit", "style": "rounds" },
+  { "id": "takenoko", "name": "Takenoko", "style": "categories" },
+  { "id": "alien-frontiers", "name": "Alien Frontiers", "style": "categories" },
+  { "id": "kingsburg", "name": "Kingsburg", "style": "categories" },
+  { "id": "wits-wagers", "name": "Wits & Wagers", "style": "rounds" },
+  { "id": "wizard", "name": "Wizard", "style": "rounds" },
+  { "id": "zooloretto", "name": "Zooloretto", "style": "categories" }
 ]

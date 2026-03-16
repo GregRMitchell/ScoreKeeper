@@ -1,0 +1,15 @@
+{
+  "id": "in-year-of-dragon",
+  "name": "In the Year of the Dragon",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "People (2 pts each)",   "type": "number", "min": 0, "max": 40 },
+    { "name": "Monks (symbols \u00d7 floors)", "type": "number", "min": 0, "max": 75 },
+    { "name": "Yuan VPs (1 per 3\u00a5)",    "type": "number", "min": 0, "max": 20 },
+    { "name": "Privileges",            "type": "number", "min": 0, "max": 40 },
+    { "name": "Court Ladies",          "type": "number", "min": 0, "max": 20 }
+  ]
+}

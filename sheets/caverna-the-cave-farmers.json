@@ -1,0 +1,29 @@
+{
+  "id": "caverna-the-cave-farmers",
+  "name": "Caverna: The Cave Farmers",
+  "minPlayers": 1,
+  "maxPlayers": 7,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Dwarves", "type": "number", "min": 0, "max": 5 },
+    { "name": "Furnishing Tiles", "type": "number", "min": 0, "max": 50 },
+    { "name": "Pastures",     "type": "number", "min": 0, "max": 12 },
+    { "name": "Fields (Sown)", "type": "number", "min": 0, "max": 8  },
+    { "name": "Stables",      "type": "number", "min": 0, "max": 9  },
+    { "name": "Mines",        "type": "number", "min": 0, "max": 12 },
+    { "name": "Gold", "type": "number", "min": 0, "max": 20 },
+    { "name": "Rubies", "type": "number", "min": 0, "max": 12 },
+    { "name": "Dogs", "type": "number", "min": 0, "max": 8 },
+    { "name": "Sheep", "type": "number", "min": 0, "max": 8 },
+    { "name": "Donkeys", "type": "number", "min": 0, "max": 6 },
+    { "name": "Wild Boars", "type": "number", "min": 0, "max": 8 },
+    { "name": "Cattle", "type": "number", "min": 0, "max": 6 },
+    { "name": "Grain (×½, round up)", "type": "number", "min": 0, "max": 8 },
+    { "name": "Vegetables", "type": "number", "min": 0, "max": 6 },
+    { "name": "Bonus Points", "type": "number", "min": 0, "max": 30 },
+    { "name": "Missing Farm Animal Types", "type": "number", "min": -8, "max": 0 },
+    { "name": "Unused Spaces", "type": "number", "min": -20, "max": 0 },
+    { "name": "Begging Markers", "type": "number", "min": -15, "max": 0 }
+  ]
+}

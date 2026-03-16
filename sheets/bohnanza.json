@@ -1,0 +1,12 @@
+{
+  "id": "bohnanza",
+  "name": "Bohnanza",
+  "minPlayers": 2,
+  "maxPlayers": 7,
+  "style": "categories",
+  "scoring": "highest",
+  "tiebreaker": "Most cards remaining in hand",
+  "categories": [
+    { "name": "Gold Coins", "type": "number", "min": 0, "max": 30 }
+  ]
+}

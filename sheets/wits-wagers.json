@@ -1,0 +1,9 @@
+{
+  "id": "wits-wagers",
+  "name": "Wits & Wagers",
+  "minPlayers": 3,
+  "maxPlayers": 7,
+  "style": "rounds",
+  "scoring": "highest",
+  "rounds": { "label": "Question", "maxRounds": 7 }
+}

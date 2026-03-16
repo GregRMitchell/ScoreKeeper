@@ -1,0 +1,9 @@
+{
+  "id": "crokinole",
+  "name": "Crokinole",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "rounds",
+  "scoring": "highest",
+  "rounds": { "label": "Round", "maxRounds": null }
+}

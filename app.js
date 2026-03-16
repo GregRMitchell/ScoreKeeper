@@ -32,9 +32,10 @@
  */
 
 const SK = {
-  PLAYERS:    'sk_players',
-  GAME_STATE: 'sk_game_state',
-  HISTORY:    'sk_history',
+  PLAYERS:       'sk_players',
+  GAME_STATE:    'sk_game_state',
+  HISTORY:       'sk_history',
+  CUSTOM_SHEETS: 'sk_custom_sheets',
 };
 
 // ============================================================
@@ -195,6 +196,24 @@ function deleteHistoryEntry(id) {
   saveHistory(getHistory().filter(r => r.id !== id));
 }
 
+// --- Custom Sheets ---
+
+function getCustomSheets() {
+  return load(SK.CUSTOM_SHEETS, []);
+}
+
+function saveCustomSheet(sheet) {
+  const sheets = getCustomSheets();
+  const idx = sheets.findIndex(s => s.id === sheet.id);
+  if (idx >= 0) sheets[idx] = sheet;
+  else sheets.push(sheet);
+  save(SK.CUSTOM_SHEETS, sheets);
+}
+
+function deleteCustomSheet(id) {
+  save(SK.CUSTOM_SHEETS, getCustomSheets().filter(s => s.id !== id));
+}
+
 // ============================================================
 // SHEETS SERVICE
 // Fetches sheet definitions from the ./sheets/ folder.
@@ -207,10 +226,14 @@ function deleteHistoryEntry(id) {
 async function fetchSheetsIndex() {
   const res = await fetch('./sheets/index.json');
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
+  const builtIn = await res.json();
+  const custom = getCustomSheets().map(s => ({ id: s.id, name: s.name, style: s.style, custom: true }));
+  return [...builtIn, ...custom].sort((a, b) => a.name.localeCompare(b.name));
 }
 
 async function fetchSheet(id) {
+  const custom = getCustomSheets().find(s => s.id === id);
+  if (custom) return custom;
   const res = await fetch(`./sheets/${id}.json`);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
@@ -252,10 +275,11 @@ function back() {
 
 function exportAll() {
   const data = {
-    version:    1,
-    exportedAt: new Date().toISOString(),
-    players:    getPlayers(),
-    history:    getHistory(),
+    version:      2,
+    exportedAt:   new Date().toISOString(),
+    players:      getPlayers(),
+    history:      getHistory(),
+    customSheets: getCustomSheets(),
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url  = URL.createObjectURL(blob);
@@ -270,7 +294,7 @@ function importAll(file) {
     reader.onload = (e) => {
       try {
         const data = JSON.parse(e.target.result);
-        if (data.version === 1 && Array.isArray(data.history)) {
+        if ((data.version === 1 || data.version === 2) && Array.isArray(data.history)) {
           const existingIds = new Set(getHistory().map(r => r.id));
           const newEntries  = data.history.filter(r => !existingIds.has(r.id));
           const merged      = [...newEntries, ...getHistory()]
@@ -281,6 +305,12 @@ function importAll(file) {
             const existingNames = new Set(existing.map(p => p.name.toLowerCase()));
             const newPlayers    = data.players.filter(p => !existingNames.has(p.name.toLowerCase()));
             savePlayers([...existing, ...newPlayers]);
+          }
+          if (Array.isArray(data.customSheets)) {
+            const existing   = getCustomSheets();
+            const existingIds = new Set(existing.map(s => s.id));
+            const newSheets  = data.customSheets.filter(s => !existingIds.has(s.id));
+            save(SK.CUSTOM_SHEETS, [...existing, ...newSheets]);
           }
           resolve(newEntries.length);
         } else {
@@ -297,7 +327,7 @@ function importAll(file) {
 // SHARED COMPONENTS
 // ============================================================
 
-function renderHeader(title, { showBack = false, showHome = false } = {}) {
+function renderHeader(title, { showBack = false, showHome = false, rightEl = null } = {}) {
   const header = el('header', { class: 'app-header' });
 
   if (showBack) {
@@ -310,7 +340,9 @@ function renderHeader(title, { showBack = false, showHome = false } = {}) {
 
   header.appendChild(el('h1', { class: 'header-title' }, title));
 
-  if (showHome) {
+  if (rightEl) {
+    header.appendChild(rightEl);
+  } else if (showHome) {
     header.appendChild(el('button', {
       class: 'btn-icon', onclick: () => navigate('home'), 'aria-label': 'Home',
     }, '🏠'));
@@ -404,7 +436,55 @@ registerView('home', () => {
 
 registerView('browse', () => {
   const frag = document.createDocumentFragment();
-  frag.appendChild(renderHeader('Choose a Game', { showBack: true }));
+
+  // Header: Import Game button on the right
+  const importLabel = el('label', {
+    class: 'btn-icon', title: 'Import game config', 'aria-label': 'Import game config',
+  }, '⬆');
+  const importInput = el('input', { type: 'file', accept: '.json' });
+  importInput.style.display = 'none';
+  importInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const sheet = JSON.parse(ev.target.result);
+        if (sheet.version === 1 || sheet.version === 2) {
+          throw new Error('This looks like a full backup. Use "Import Backup" on the Home screen instead.');
+        }
+        if (!sheet.name || !sheet.style || !sheet.scoring) {
+          throw new Error('Not a valid ScoreKeeper game config file.');
+        }
+        if (sheet.style === 'categories' && !Array.isArray(sheet.categories)) {
+          throw new Error('Categories config must include a "categories" array.');
+        }
+        if (sheet.style === 'rounds' && !sheet.rounds) {
+          throw new Error('Rounds config must include a "rounds" object.');
+        }
+        const customs = getCustomSheets();
+        const existingIdx = customs.findIndex(s => s.id === sheet.id);
+        if (existingIdx >= 0) {
+          if (!confirm(`"${sheet.name}" already exists in your custom games. Replace it?`)) {
+            importInput.value = '';
+            return;
+          }
+        } else {
+          sheet.id = 'custom_' + uid();
+        }
+        saveCustomSheet(sheet);
+        importInput.value = '';
+        navigate('browse');
+      } catch (err) {
+        alert(`Import failed: ${err.message}`);
+        importInput.value = '';
+      }
+    };
+    reader.readAsText(file);
+  });
+  importLabel.appendChild(importInput);
+
+  frag.appendChild(renderHeader('Choose a Game', { showBack: true, rightEl: importLabel }));
 
   const main = el('main', { class: 'view-browse' });
   frag.appendChild(main);
@@ -412,7 +492,19 @@ registerView('browse', () => {
   function buildCard(entry, container) {
     const card = el('div', { class: 'sheet-card', role: 'button', tabindex: '0' });
     card.appendChild(el('span', { class: 'sheet-name' }, entry.name));
-    card.appendChild(el('span', { class: `sheet-badge badge-${entry.style}` }, entry.style));
+
+    const cardRight = el('div', { class: 'sheet-card-right' });
+    cardRight.appendChild(el('span', {
+      class: `sheet-badge badge-${entry.custom ? 'custom' : entry.style}`,
+    }, entry.custom ? 'custom' : entry.style));
+
+    if (entry.custom) {
+      cardRight.appendChild(el('button', {
+        type: 'button', class: 'btn-icon-sm', title: 'Edit', 'aria-label': `Edit ${entry.name}`,
+        onclick: (e) => { e.stopPropagation(); navigate('game-builder', { sheetId: entry.id }); },
+      }, '✏'));
+    }
+    card.appendChild(cardRight);
 
     const pick = async () => {
       card.classList.add('loading');
@@ -431,10 +523,16 @@ registerView('browse', () => {
     container.appendChild(card);
   }
 
-  const section  = el('section', { class: 'browse-section' });
-  const status   = el('div', { class: 'status-bar' });
+  const section   = el('section', { class: 'browse-section' });
+  const status    = el('div', { class: 'status-bar' });
+  const createBtn = el('button', {
+    type: 'button', class: 'btn btn-secondary',
+    onclick: () => navigate('game-builder'),
+  }, '＋ Create Custom Game');
   const sheetList = el('div', { class: 'sheet-list' });
+
   section.appendChild(status);
+  section.appendChild(createBtn);
   section.appendChild(sheetList);
   main.appendChild(section);
 
@@ -1148,6 +1246,320 @@ registerView('players', () => {
 
   render();
   frag.appendChild(main);
+  return frag;
+});
+
+// ============================================================
+// GAME BUILDER VIEW
+// ============================================================
+
+registerView('game-builder', ({ sheetId } = {}) => {
+  const editing = sheetId != null;
+  const existing = editing ? getCustomSheets().find(s => s.id === sheetId) : null;
+
+  const frag = document.createDocumentFragment();
+  frag.appendChild(renderHeader(editing ? 'Edit Game' : 'New Game', { showBack: true }));
+
+  const main = el('main', { class: 'view-builder' });
+  frag.appendChild(main);
+
+  // Mutable builder state — separate from DOM so re-renders don't lose data
+  const state = {
+    scoring:    existing?.scoring             || 'highest',
+    style:      existing?.style               || 'categories',
+    categories: existing?.categories ? existing.categories.map(c => ({ ...c })) : [],
+    roundLabel: existing?.rounds?.label       || 'Round',
+    maxRounds:  existing?.rounds?.maxRounds   ?? '',
+  };
+
+  // ---- SECTION: Game Info ----
+  const infoSection = el('section', { class: 'builder-section' });
+  infoSection.appendChild(el('h2', {}, 'Game Info'));
+
+  const nameField = el('div', { class: 'builder-field' });
+  nameField.appendChild(el('label', {}, 'Game Name *'));
+  const nameInput = el('input', {
+    type: 'text', class: 'input-text', placeholder: 'e.g. My Party Game',
+    value: existing?.name || '', 'aria-label': 'Game name',
+  });
+  nameField.appendChild(nameInput);
+  infoSection.appendChild(nameField);
+
+  const playersRow = el('div', { class: 'builder-row' });
+
+  const minField = el('div', { class: 'builder-field' });
+  minField.appendChild(el('label', {}, 'Min Players'));
+  const minInput = el('input', {
+    type: 'number', class: 'input-text', min: '1', max: '20',
+    style: 'max-width:6rem',
+    value: String(existing?.minPlayers ?? 2), 'aria-label': 'Min players',
+  });
+  minField.appendChild(minInput);
+  playersRow.appendChild(minField);
+
+  const maxField = el('div', { class: 'builder-field' });
+  maxField.appendChild(el('label', {}, 'Max Players'));
+  const maxInput = el('input', {
+    type: 'number', class: 'input-text', min: '1', max: '20',
+    style: 'max-width:6rem',
+    value: String(existing?.maxPlayers ?? 10), 'aria-label': 'Max players',
+  });
+  maxField.appendChild(maxInput);
+  playersRow.appendChild(maxField);
+  infoSection.appendChild(playersRow);
+
+  // Scoring radio
+  const scoringField = el('div', { class: 'builder-field' });
+  scoringField.appendChild(el('label', {}, 'Winner'));
+  const scoringGroup = el('div', { class: 'radio-group' });
+  const highBtn = el('button', { type: 'button', class: `radio-btn${state.scoring === 'highest' ? ' selected' : ''}` }, '▲ Highest wins');
+  const lowBtn  = el('button', { type: 'button', class: `radio-btn${state.scoring === 'lowest'  ? ' selected' : ''}` }, '▼ Lowest wins');
+  highBtn.addEventListener('click', () => { state.scoring = 'highest'; highBtn.classList.add('selected'); lowBtn.classList.remove('selected'); });
+  lowBtn.addEventListener('click',  () => { state.scoring = 'lowest';  lowBtn.classList.add('selected');  highBtn.classList.remove('selected'); });
+  scoringGroup.appendChild(highBtn);
+  scoringGroup.appendChild(lowBtn);
+  scoringField.appendChild(scoringGroup);
+  infoSection.appendChild(scoringField);
+
+  // Style radio
+  const styleField = el('div', { class: 'builder-field' });
+  styleField.appendChild(el('label', {}, 'Scoring Style'));
+  const styleGroup = el('div', { class: 'radio-group' });
+  const catBtn = el('button', { type: 'button', class: `radio-btn${state.style === 'categories' ? ' selected' : ''}` }, '📋 Categories');
+  const rndBtn = el('button', { type: 'button', class: `radio-btn${state.style === 'rounds'     ? ' selected' : ''}` }, '🔄 Rounds');
+  catBtn.addEventListener('click', () => { state.style = 'categories'; catBtn.classList.add('selected'); rndBtn.classList.remove('selected'); renderStyleSection(); });
+  rndBtn.addEventListener('click', () => { state.style = 'rounds';     rndBtn.classList.add('selected'); catBtn.classList.remove('selected'); renderStyleSection(); });
+  styleGroup.appendChild(catBtn);
+  styleGroup.appendChild(rndBtn);
+  styleField.appendChild(styleGroup);
+  infoSection.appendChild(styleField);
+
+  main.appendChild(infoSection);
+
+  // ---- Style-specific section (swapped when style radio changes) ----
+  const styleContainer = el('div');
+  main.appendChild(styleContainer);
+
+  function renderCategoriesSection() {
+    const section = el('section', { class: 'builder-section' });
+    section.appendChild(el('h2', {}, 'Scoring Categories'));
+
+    const catList = el('div', { class: 'cat-list' });
+
+    function renderCatRows() {
+      catList.innerHTML = '';
+      if (state.categories.length === 0) {
+        catList.appendChild(el('p', { class: 'hint' }, 'No categories yet — add one below.'));
+      }
+      state.categories.forEach((cat, i) => {
+        const row = el('div', { class: 'cat-row' });
+
+        const nameIn = el('input', {
+          type: 'text', class: 'cat-name-input', placeholder: 'Category name…',
+          value: cat.name || '', 'aria-label': 'Category name',
+        });
+        nameIn.addEventListener('input', () => { cat.name = nameIn.value; });
+        row.appendChild(nameIn);
+
+        const typeSelect = el('select', { class: 'cat-type-select', 'aria-label': 'Score type' });
+        typeSelect.appendChild(el('option', { value: 'number' }, 'Number'));
+        typeSelect.appendChild(el('option', { value: 'boolean' }, 'Checkbox'));
+        typeSelect.value = cat.type || 'number';
+        typeSelect.addEventListener('change', () => {
+          cat.type = typeSelect.value;
+          if (cat.type === 'boolean') { delete cat.min; delete cat.max; if (cat.value == null) cat.value = 1; }
+          else { delete cat.value; }
+          renderCatRows();
+        });
+        row.appendChild(typeSelect);
+
+        if (cat.type === 'boolean') {
+          row.appendChild(el('span', { class: 'cat-opt-label' }, 'Pts'));
+          const valIn = el('input', {
+            type: 'number', class: 'cat-opt-input', min: '0', placeholder: '1',
+            value: cat.value != null ? String(cat.value) : '1', 'aria-label': 'Point value',
+          });
+          valIn.addEventListener('input', () => { cat.value = Number(valIn.value) || 0; });
+          row.appendChild(valIn);
+        } else {
+          row.appendChild(el('span', { class: 'cat-opt-label' }, 'Min'));
+          const minIn = el('input', {
+            type: 'number', class: 'cat-opt-input',
+            placeholder: '—', value: cat.min != null ? String(cat.min) : '', 'aria-label': 'Min value',
+          });
+          minIn.addEventListener('input', () => {
+            const v = minIn.value.trim();
+            if (v === '') delete cat.min; else cat.min = Number(v);
+          });
+          row.appendChild(minIn);
+
+          row.appendChild(el('span', { class: 'cat-opt-label' }, 'Max'));
+          const maxIn = el('input', {
+            type: 'number', class: 'cat-opt-input',
+            placeholder: '—', value: cat.max != null ? String(cat.max) : '', 'aria-label': 'Max value',
+          });
+          maxIn.addEventListener('input', () => {
+            const v = maxIn.value.trim();
+            if (v === '') delete cat.max; else cat.max = Number(v);
+          });
+          row.appendChild(maxIn);
+        }
+
+        const acts = el('div', { class: 'cat-row-actions' });
+        if (i > 0) {
+          acts.appendChild(el('button', {
+            type: 'button', class: 'btn-icon-sm', 'aria-label': 'Move up',
+            onclick: () => { [state.categories[i-1], state.categories[i]] = [state.categories[i], state.categories[i-1]]; renderCatRows(); },
+          }, '↑'));
+        }
+        if (i < state.categories.length - 1) {
+          acts.appendChild(el('button', {
+            type: 'button', class: 'btn-icon-sm', 'aria-label': 'Move down',
+            onclick: () => { [state.categories[i], state.categories[i+1]] = [state.categories[i+1], state.categories[i]]; renderCatRows(); },
+          }, '↓'));
+        }
+        acts.appendChild(el('button', {
+          type: 'button', class: 'btn-icon-sm btn-remove', 'aria-label': 'Remove category',
+          onclick: () => { state.categories.splice(i, 1); renderCatRows(); },
+        }, '✕'));
+        row.appendChild(acts);
+
+        catList.appendChild(row);
+      });
+    }
+
+    renderCatRows();
+    section.appendChild(catList);
+    section.appendChild(el('button', {
+      type: 'button', class: 'btn btn-secondary btn-sm',
+      onclick: () => { state.categories.push({ name: '', type: 'number' }); renderCatRows(); },
+    }, '+ Add Category'));
+
+    return section;
+  }
+
+  function renderRoundsSection() {
+    const section = el('section', { class: 'builder-section' });
+    section.appendChild(el('h2', {}, 'Rounds Settings'));
+
+    const labelField = el('div', { class: 'builder-field' });
+    labelField.appendChild(el('label', {}, 'Round Label'));
+    const labelIn = el('input', {
+      type: 'text', class: 'input-text', placeholder: 'Round',
+      value: state.roundLabel, 'aria-label': 'Round label',
+    });
+    labelIn.addEventListener('input', () => { state.roundLabel = labelIn.value || 'Round'; });
+    labelField.appendChild(labelIn);
+    section.appendChild(labelField);
+
+    const maxRoundsField = el('div', { class: 'builder-field' });
+    maxRoundsField.appendChild(el('label', {}, 'Max Rounds (blank = unlimited)'));
+    const maxRoundsIn = el('input', {
+      type: 'number', class: 'input-text', min: '1', placeholder: 'Unlimited',
+      value: (state.maxRounds != null && state.maxRounds !== '') ? String(state.maxRounds) : '',
+      'aria-label': 'Max rounds',
+    });
+    maxRoundsIn.addEventListener('input', () => {
+      const v = maxRoundsIn.value.trim();
+      state.maxRounds = v !== '' ? Number(v) : null;
+    });
+    maxRoundsField.appendChild(maxRoundsIn);
+    section.appendChild(maxRoundsField);
+
+    return section;
+  }
+
+  function renderStyleSection() {
+    styleContainer.innerHTML = '';
+    styleContainer.appendChild(
+      state.style === 'categories' ? renderCategoriesSection() : renderRoundsSection()
+    );
+  }
+  renderStyleSection();
+
+  // ---- Build the sheet object from current state (used by save and export) ----
+  function buildSheet(id) {
+    const sheet = {
+      id,
+      name:       nameInput.value.trim(),
+      minPlayers: Math.max(1, Number(minInput.value) || 1),
+      maxPlayers: Math.max(1, Number(maxInput.value) || 10),
+      scoring:    state.scoring,
+      style:      state.style,
+    };
+    if (state.style === 'categories') {
+      sheet.categories = state.categories.map(c => {
+        const cat = { name: c.name.trim(), type: c.type };
+        if (c.type === 'number') {
+          if (c.min !== undefined) cat.min = c.min;
+          if (c.max !== undefined) cat.max = c.max;
+        } else {
+          cat.value = c.value != null ? c.value : 1;
+        }
+        return cat;
+      });
+    } else {
+      sheet.rounds = {
+        label:     state.roundLabel || 'Round',
+        maxRounds: (state.maxRounds != null && state.maxRounds !== '') ? Number(state.maxRounds) : null,
+      };
+    }
+    return sheet;
+  }
+
+  function validate() {
+    if (!nameInput.value.trim()) { alert('Please enter a game name.'); nameInput.focus(); return false; }
+    if (state.style === 'categories') {
+      if (state.categories.length === 0) { alert('Add at least one scoring category.'); return false; }
+      const unnamedIdx = state.categories.findIndex(c => !c.name.trim());
+      if (unnamedIdx >= 0) { alert(`Category ${unnamedIdx + 1} needs a name.`); return false; }
+    }
+    return true;
+  }
+
+  // ---- SECTION: Actions ----
+  const actionsSection = el('div', { class: 'builder-actions' });
+
+  actionsSection.appendChild(el('button', {
+    type: 'button', class: 'btn btn-primary btn-full',
+    onclick: () => {
+      if (!validate()) return;
+      const id = editing ? sheetId : 'custom_' + uid();
+      saveCustomSheet(buildSheet(id));
+      navigate('browse');
+    },
+  }, editing ? '💾 Save Changes' : '✅ Save Game'));
+
+  actionsSection.appendChild(el('button', {
+    type: 'button', class: 'btn btn-ghost btn-full',
+    onclick: () => {
+      if (!nameInput.value.trim()) { alert('Enter a game name before exporting.'); return; }
+      const id    = editing ? sheetId : 'custom_' + uid();
+      const sheet = buildSheet(id);
+      const blob  = new Blob([JSON.stringify(sheet, null, 2)], { type: 'application/json' });
+      const url   = URL.createObjectURL(blob);
+      const a     = el('a', {
+        href: url,
+        download: sheet.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') + '-scoresheet.json',
+      });
+      a.click();
+      URL.revokeObjectURL(url);
+    },
+  }, '⬇ Export Config'));
+
+  if (editing) {
+    actionsSection.appendChild(el('button', {
+      type: 'button', class: 'btn btn-danger btn-full',
+      onclick: () => {
+        if (confirm(`Delete "${existing?.name || 'this game'}"? This cannot be undone.`)) {
+          deleteCustomSheet(sheetId);
+          navigate('browse');
+        }
+      },
+    }, '🗑 Delete Game'));
+  }
+
+  main.appendChild(actionsSection);
   return frag;
 });
 

@@ -1,0 +1,16 @@
+{
+  "id": "zooloretto",
+  "name": "Zooloretto",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "4-Space Enclosure", "type": "number", "min": 0, "max": 6 },
+    { "name": "5-Space Enclosure", "type": "number", "min": 0, "max": 8 },
+    { "name": "6-Space Enclosure", "type": "number", "min": 0, "max": 10 },
+    { "name": "Vending Stalls", "type": "number", "min": 0, "max": 20 },
+    { "name": "Barn Animals", "type": "number", "min": -20, "max": 0 },
+    { "name": "Coins", "type": "number", "min": 0, "max": 10 }
+  ]
+}

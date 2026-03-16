@@ -1,0 +1,12 @@
+{
+  "id": "power-grid-deluxe",
+  "name": "Power Grid Deluxe",
+  "minPlayers": 2,
+  "maxPlayers": 6,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Cities Powered", "type": "number", "min": 0, "max": 21 },
+    { "name": "Elektro (Tiebreaker)", "type": "number", "min": 0 }
+  ]
+}

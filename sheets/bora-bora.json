@@ -1,0 +1,20 @@
+{
+  "id": "bora-bora",
+  "name": "Bora Bora",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "VP Track (after final tasks)", "type": "number", "min": 0, "max": 160 },
+    { "name": "Fish Tiles", "type": "number", "min": 0, "max": 72 },
+    { "name": "Jewelry Tiles", "type": "number", "min": 0, "max": 54 },
+    { "name": "Unused God Tiles (×2 VP each)", "type": "number", "min": 0, "max": 14 },
+    { "name": "9 Task Tiles Completed", "type": "boolean", "value": 6 },
+    { "name": "6 Jewelry Tiles Claimed", "type": "boolean", "value": 6 },
+    { "name": "All 12 Ceremony Spaces Full", "type": "boolean", "value": 6 },
+    { "name": "All 6 Buildings Built", "type": "boolean", "value": 6 },
+    { "name": "Huts in All 12 Regions", "type": "boolean", "value": 6 },
+    { "name": "All 12 Person Spaces Filled", "type": "boolean", "value": 6 }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "orleans",
+  "name": "Orléans",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Coins", "type": "number", "min": 0, "max": 50 },
+    { "name": "Grain", "type": "number", "min": 0, "max": 20 },
+    { "name": "Cheese", "type": "number", "min": 0, "max": 30 },
+    { "name": "Wine", "type": "number", "min": 0, "max": 30 },
+    { "name": "Wool", "type": "number", "min": 0, "max": 40 },
+    { "name": "Brocade", "type": "number", "min": 0, "max": 25 },
+    { "name": "Trading Stations", "type": "number", "min": 0, "max": 20 },
+    { "name": "Citizen Tiles", "type": "number", "min": 0, "max": 10 },
+    { "name": "Development Track", "type": "number", "min": 0, "max": 20 }
+  ]
+}

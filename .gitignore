@@ -10,3 +10,7 @@ node_modules/
 
 # Logs
 *.log
+
+collection.csv
+
+scoresheet-todo.csv
