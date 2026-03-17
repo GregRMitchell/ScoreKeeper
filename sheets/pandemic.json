@@ -1,0 +1,7 @@
+{
+  "id": "pandemic",
+  "name": "Pandemic",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "coop"
+}

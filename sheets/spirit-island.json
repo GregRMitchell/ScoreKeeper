@@ -1,0 +1,7 @@
+{
+  "id": "spirit-island",
+  "name": "Spirit Island",
+  "minPlayers": 1,
+  "maxPlayers": 4,
+  "style": "coop"
+}

@@ -115,6 +115,11 @@
     "name": "Fairy Tale"
   },
   {
+    "id": "forbidden-island",
+    "name": "Forbidden Island",
+    "style": "coop"
+  },
+  {
     "id": "galaxy-trucker",
     "name": "Galaxy Trucker",
     "style": "rounds"
@@ -195,6 +200,11 @@
     "style": "categories"
   },
   {
+    "id": "pandemic",
+    "name": "Pandemic",
+    "style": "coop"
+  },
+  {
     "style": "categories",
     "id": "port-royal",
     "name": "Port Royal"
@@ -238,6 +248,11 @@
     "style": "categories",
     "id": "smash-up",
     "name": "Smash Up"
+  },
+  {
+    "id": "spirit-island",
+    "name": "Spirit Island",
+    "style": "coop"
   },
   {
     "id": "takenoko",

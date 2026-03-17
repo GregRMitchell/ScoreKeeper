@@ -193,6 +193,9 @@ function addToHistory(state) {
         return sum + catScore(cat, val);
       }, 0);
     }
+    if (sheet.style === 'coop') {
+      return (state.outcomes || {})[key] === true ? 1 : 0;
+    }
     return (state.rounds || []).reduce((sum, round) => sum + (Number(round[key]) || 0), 0);
   };
 
@@ -201,7 +204,9 @@ function addToHistory(state) {
     .sort((a, b) => sheet.scoring === 'lowest' ? a.total - b.total : b.total - a.total);
 
   const topScore = totals[0]?.total;
-  const winners  = totals.filter(t => t.total === topScore).map(t => t.name);
+  const winners  = sheet.style === 'coop'
+    ? totals.filter(t => t.total === 1).map(t => t.name)
+    : totals.filter(t => t.total === topScore).map(t => t.name);
 
   const record = {
     id:         uid(),
@@ -212,6 +217,7 @@ function addToHistory(state) {
     players:    state.players,
     scores:     state.scores  || {},
     rounds:     state.rounds  || [],
+    outcomes:   state.outcomes || {},
     categories: sheet.categories || [],
     roundLabel: sheet.rounds?.label || 'Round',
     totals,
@@ -498,14 +504,14 @@ registerView('browse', () => {
         if (sheet.version === 1 || sheet.version === 2) {
           throw new Error('This looks like a full backup. Use "Import Backup" on the Home screen instead.');
         }
-        if (!sheet.name || !sheet.style || !sheet.scoring) {
+        if (!sheet.name || !sheet.style) {
           throw new Error('Not a valid ScoreKeeper game config file.');
         }
-        if (sheet.style === 'categories' && !Array.isArray(sheet.categories)) {
-          throw new Error('Categories config must include a "categories" array.');
+        if (sheet.style === 'categories' && (!sheet.scoring || !Array.isArray(sheet.categories))) {
+          throw new Error('Categories config must include "scoring" and a "categories" array.');
         }
-        if (sheet.style === 'rounds' && !sheet.rounds) {
-          throw new Error('Rounds config must include a "rounds" object.');
+        if (sheet.style === 'rounds' && (!sheet.scoring || !sheet.rounds)) {
+          throw new Error('Rounds config must include "scoring" and a "rounds" object.');
         }
         const customs = getCustomSheets();
         const existingIdx = customs.findIndex(s => s.id === sheet.id);
@@ -778,7 +784,11 @@ registerView('setup', ({ sheet }) => {
         });
       });
     }
-    // rounds style starts with an empty rounds array
+    if (sheet.style === 'coop') {
+      state.outcomes = {};
+      players.forEach(p => { state.outcomes[p.key] = null; });
+    }
+    // rounds and race styles start with empty arrays
 
     saveGameState(state);
     navigate('game');
@@ -1068,6 +1078,80 @@ function renderRoundsGame(state) {
 }
 
 // ============================================================
+// GAME VIEW — CO-OP STYLE
+// ============================================================
+
+function renderCoopGame(state) {
+  const frag = document.createDocumentFragment();
+  frag.appendChild(renderHeader(state.sheet.name, { showHome: true }));
+
+  const main = el('main', { class: 'view-game' });
+  if (!state.outcomes) state.outcomes = {};
+
+  const render = () => {
+    main.innerHTML = '';
+    const table = el('div', { class: 'coop-table' });
+
+    state.players.forEach(p => {
+      const outcome = state.outcomes[p.key];
+      const row = el('div', { class: 'coop-row' });
+      row.appendChild(el('div', { class: 'coop-player-name' }, p.name));
+
+      const btnGroup = el('div', { class: 'coop-btn-group' });
+
+      const wonBtn = el('button', {
+        type: 'button',
+        class: `coop-outcome-btn coop-won${outcome === true ? ' selected' : ''}`,
+        'aria-pressed': String(outcome === true),
+        'aria-label': `${p.name} — Won`,
+        onclick: () => {
+          state.outcomes[p.key] = outcome === true ? null : true;
+          saveGameState(state);
+          render();
+        },
+      }, '✓ Won');
+
+      const lostBtn = el('button', {
+        type: 'button',
+        class: `coop-outcome-btn coop-lost${outcome === false ? ' selected' : ''}`,
+        'aria-pressed': String(outcome === false),
+        'aria-label': `${p.name} — Lost`,
+        onclick: () => {
+          state.outcomes[p.key] = outcome === false ? null : false;
+          saveGameState(state);
+          render();
+        },
+      }, '✗ Lost');
+
+      btnGroup.appendChild(wonBtn);
+      btnGroup.appendChild(lostBtn);
+      row.appendChild(btnGroup);
+      table.appendChild(row);
+    });
+
+    main.appendChild(table);
+
+    const actions = el('div', { class: 'game-actions' });
+    actions.appendChild(el('button', {
+      class: 'btn btn-primary',
+      onclick: () => {
+        state.finished = true;
+        if (!state.historyId) {
+          state.historyId = addToHistory(state).id;
+        }
+        saveGameState(state);
+        navigate('results');
+      },
+    }, '🏁 Finish Game'));
+    main.appendChild(actions);
+  };
+
+  render();
+  frag.appendChild(main);
+  return frag;
+}
+
+// ============================================================
 // GAME VIEW (dispatcher)
 // ============================================================
 
@@ -1077,6 +1161,7 @@ registerView('game', () => {
   if (state.finished) { navigate('results'); return null; }
   if (state.sheet.style === 'categories') return renderCategoriesGame(state);
   if (state.sheet.style === 'rounds')     return renderRoundsGame(state);
+  if (state.sheet.style === 'coop')       return renderCoopGame(state);
   return el('p', { class: 'error-msg' }, `Unknown sheet style: "${state.sheet.style}"`);
 });
 
@@ -1302,6 +1387,21 @@ registerView('history-detail', ({ id }) => {
       }, t ? String(t.total) : '0'));
     });
     table.appendChild(totalsRow);
+
+  } else if (record.sheetStyle === 'coop') {
+    record.players.forEach(p => {
+      const outcome = (record.outcomes || {})[p.key];
+      const isWinner = record.winners.includes(p.name);
+      const row = el('div', { class: 'score-row' });
+      row.style.gridTemplateColumns = '1fr auto';
+      row.appendChild(el('div', {
+        class: `score-cell cell-label${isWinner ? ' leader' : ''}`,
+      }, p.name));
+      const badge = el('div', { class: `score-cell coop-history-badge${outcome === true ? ' coop-won-badge' : outcome === false ? ' coop-lost-badge' : ''}` });
+      badge.textContent = outcome === true ? '✓ Won' : outcome === false ? '✗ Lost' : '?';
+      row.appendChild(badge);
+      table.appendChild(row);
+    });
   }
 
   main.appendChild(table);
@@ -1438,7 +1538,7 @@ registerView('game-builder', ({ sheetId } = {}) => {
   playersRow.appendChild(maxField);
   infoSection.appendChild(playersRow);
 
-  // Scoring radio
+  // Scoring radio — hidden for styles that have no winner concept
   const scoringField = el('div', { class: 'builder-field' });
   scoringField.appendChild(el('label', {}, 'Winner'));
   const scoringGroup = el('div', { class: 'radio-group' });
@@ -1451,18 +1551,40 @@ registerView('game-builder', ({ sheetId } = {}) => {
   scoringField.appendChild(scoringGroup);
   infoSection.appendChild(scoringField);
 
+  const updateScoringVisibility = () => {
+    scoringField.style.display = (state.style === 'coop' || state.style === 'race') ? 'none' : '';
+  };
+
   // Style radio
   const styleField = el('div', { class: 'builder-field' });
   styleField.appendChild(el('label', {}, 'Scoring Style'));
   const styleGroup = el('div', { class: 'radio-group' });
-  const catBtn = el('button', { type: 'button', class: `radio-btn${state.style === 'categories' ? ' selected' : ''}` }, '📋 Categories');
-  const rndBtn = el('button', { type: 'button', class: `radio-btn${state.style === 'rounds'     ? ' selected' : ''}` }, '🔄 Rounds');
-  catBtn.addEventListener('click', () => { state.style = 'categories'; catBtn.classList.add('selected'); rndBtn.classList.remove('selected'); renderStyleSection(); });
-  rndBtn.addEventListener('click', () => { state.style = 'rounds';     rndBtn.classList.add('selected'); catBtn.classList.remove('selected'); renderStyleSection(); });
+  const catBtn  = el('button', { type: 'button', class: `radio-btn${state.style === 'categories' ? ' selected' : ''}` }, '📋 Categories');
+  const rndBtn  = el('button', { type: 'button', class: `radio-btn${state.style === 'rounds'     ? ' selected' : ''}` }, '🔄 Rounds');
+  const coopBtn = el('button', { type: 'button', class: `radio-btn${state.style === 'coop'       ? ' selected' : ''}` }, '🤝 Co-op');
+  const raceBtn = el('button', { type: 'button', class: `radio-btn${state.style === 'race'       ? ' selected' : ''}` }, '🏎 Race');
+
+  const setStyle = (s) => {
+    state.style = s;
+    [catBtn, rndBtn, coopBtn, raceBtn].forEach(b => b.classList.remove('selected'));
+    ({ categories: catBtn, rounds: rndBtn, coop: coopBtn, race: raceBtn })[s].classList.add('selected');
+    updateScoringVisibility();
+    renderStyleSection();
+  };
+
+  catBtn.addEventListener('click',  () => setStyle('categories'));
+  rndBtn.addEventListener('click',  () => setStyle('rounds'));
+  coopBtn.addEventListener('click', () => setStyle('coop'));
+  raceBtn.addEventListener('click', () => setStyle('race'));
+
   styleGroup.appendChild(catBtn);
   styleGroup.appendChild(rndBtn);
+  styleGroup.appendChild(coopBtn);
+  styleGroup.appendChild(raceBtn);
   styleField.appendChild(styleGroup);
   infoSection.appendChild(styleField);
+
+  updateScoringVisibility();
 
   main.appendChild(infoSection);
 
@@ -1669,9 +1791,18 @@ registerView('game-builder', ({ sheetId } = {}) => {
 
   function renderStyleSection() {
     styleContainer.innerHTML = '';
-    styleContainer.appendChild(
-      state.style === 'categories' ? renderCategoriesSection() : renderRoundsSection()
-    );
+    if (state.style === 'categories') {
+      styleContainer.appendChild(renderCategoriesSection());
+    } else if (state.style === 'rounds') {
+      styleContainer.appendChild(renderRoundsSection());
+    } else {
+      // coop and race need no additional configuration
+      styleContainer.appendChild(el('p', { class: 'hint', style: 'padding: 0.5rem 0' },
+        state.style === 'coop'
+          ? 'Co-op games record a Win or Loss for each player. No further configuration needed.'
+          : 'Race games record finishing order. No further configuration needed.'
+      ));
+    }
   }
   renderStyleSection();
 
@@ -1682,10 +1813,10 @@ registerView('game-builder', ({ sheetId } = {}) => {
       name:       nameInput.value.trim(),
       minPlayers: Math.max(1, Number(minInput.value) || 1),
       maxPlayers: Math.max(1, Number(maxInput.value) || 10),
-      scoring:    state.scoring,
       style:      state.style,
     };
     if (state.style === 'categories') {
+      sheet.scoring = state.scoring;
       sheet.categories = state.categories.map(c => {
         const cat = { name: c.name.trim(), type: c.type };
         if (c.type === 'boolean') {
@@ -1711,12 +1842,14 @@ registerView('game-builder', ({ sheetId } = {}) => {
         }
         return cat;
       });
-    } else {
+    } else if (state.style === 'rounds') {
+      sheet.scoring = state.scoring;
       sheet.rounds = {
         label:     state.roundLabel || 'Round',
         maxRounds: (state.maxRounds != null && state.maxRounds !== '') ? Number(state.maxRounds) : null,
       };
     }
+    // coop and race: no additional fields
     return sheet;
   }
 

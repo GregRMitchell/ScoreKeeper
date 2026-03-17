@@ -1,0 +1,7 @@
+{
+  "id": "forbidden-island",
+  "name": "Forbidden Island",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "coop"
+}
