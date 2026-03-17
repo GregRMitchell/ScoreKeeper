@@ -855,7 +855,7 @@ function renderCategoriesGame(state) {
         } else if (cat.type === 'lookup') {
           const input = el('input', {
             type: 'number', class: 'score-input', value: String(val),
-            min: '0', 'aria-label': `${p.name} — ${cat.name}`,
+            'aria-label': `${p.name} — ${cat.name}`,
           });
           const badge = el('span', { class: 'computed-pts' }, `= ${lookupPoints(cat.table || [], val)} pts`);
           input.addEventListener('change', () => {
@@ -875,10 +875,12 @@ function renderCategoriesGame(state) {
             const input = el('input', {
               type: 'number', class: 'score-input formula-input',
               value: String(storedObj[inp.key] ?? 0),
-              min: inp.min != null ? String(inp.min) : '',
-              max: inp.max != null ? String(inp.max) : '',
               'aria-label': `${p.name} — ${cat.name} — ${inp.label}`,
             });
+            const fv = Number(storedObj[inp.key] ?? 0);
+            if ((inp.min != null && fv < inp.min) || (inp.max != null && fv > inp.max)) {
+              input.classList.add('out-of-range');
+            }
             input.addEventListener('change', () => {
               storedObj[inp.key] = Number(input.value) || 0;
               state.scores[p.key][cat.name] = { ...storedObj };
@@ -894,10 +896,12 @@ function renderCategoriesGame(state) {
         } else {
           const input = el('input', {
             type: 'number', class: 'score-input', value: String(val),
-            min: cat.min != null ? String(cat.min) : '',
-            max: cat.max != null ? String(cat.max) : '',
             'aria-label': `${p.name} — ${cat.name}`,
           });
+          const nv = Number(val) || 0;
+          if ((cat.min != null && nv < cat.min) || (cat.max != null && nv > cat.max)) {
+            input.classList.add('out-of-range');
+          }
           input.addEventListener('change', () => {
             state.scores[p.key][cat.name] = Number(input.value) || 0;
             saveGameState(state);

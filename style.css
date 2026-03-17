@@ -483,6 +483,8 @@ main {
   transition: border-color 0.15s;
 }
 .score-input:focus { outline: none; border-color: var(--primary); }
+.score-input.out-of-range { border-color: var(--accent); }
+.score-input.out-of-range:focus { border-color: var(--accent); }
 
 .score-checkbox {
   width: 1.2rem;
