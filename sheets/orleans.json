@@ -12,15 +12,15 @@
     { "name": "Wine", "type": "number", "min": 0, "max": 30 },
     { "name": "Wool", "type": "number", "min": 0, "max": 40 },
     { "name": "Brocade", "type": "number", "min": 0, "max": 25 },
-    { "name": "Trading Stations", "type": "number", "min": 0, "max": 20 },
     {
-      "name": "Citizen Bonus",
+      "name": "Citizens & Stations Bonus",
       "type": "formula",
       "inputs": [
-        { "label": "Citizens",  "key": "citizens", "min": 0, "max": 10 },
-        { "label": "Dev Level", "key": "level",    "min": 0, "max": 20 }
+        { "label": "Citizens",         "key": "citizens", "min": 0, "max": 10 },
+        { "label": "Trading Stations", "key": "stations", "min": 0, "max": 20 },
+        { "label": "Dev Level",        "key": "level",    "min": 0, "max": 5  }
       ],
-      "formula": "citizens * level"
+      "formula": "(citizens + stations) * level"
     }
   ]
 }
