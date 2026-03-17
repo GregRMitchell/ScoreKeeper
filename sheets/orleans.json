@@ -13,7 +13,14 @@
     { "name": "Wool", "type": "number", "min": 0, "max": 40 },
     { "name": "Brocade", "type": "number", "min": 0, "max": 25 },
     { "name": "Trading Stations", "type": "number", "min": 0, "max": 20 },
-    { "name": "Citizen Tiles", "type": "number", "min": 0, "max": 10 },
-    { "name": "Development Track", "type": "number", "min": 0, "max": 20 }
+    {
+      "name": "Citizen Bonus",
+      "type": "formula",
+      "inputs": [
+        { "label": "Citizens",  "key": "citizens", "min": 0, "max": 10 },
+        { "label": "Dev Level", "key": "level",    "min": 0, "max": 20 }
+      ],
+      "formula": "citizens * level"
+    }
   ]
 }

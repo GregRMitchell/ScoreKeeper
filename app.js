@@ -14,7 +14,12 @@
  *   "style": "categories", "scoring": "highest",
  *   "categories": [
  *     { "name": "Settlements", "type": "number", "min": 0, "max": 5 },
- *     { "name": "Longest Road", "type": "boolean", "value": 2 }
+ *     { "name": "Longest Road", "type": "boolean", "value": 2 },
+ *     { "name": "Sheep", "type": "lookup",
+ *       "table": [{"max":0,"points":-1},{"min":1,"max":3,"points":1},{"min":8,"points":4}] },
+ *     { "name": "Citizen VP", "type": "formula",
+ *       "inputs": [{"label":"Citizens","key":"citizens"},{"label":"Dev Level","key":"level"}],
+ *       "formula": "citizens * level" }
  *   ]
  * }
  *
@@ -48,6 +53,38 @@ function uid() {
 
 function formatDate(ts) {
   return new Date(ts).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+// Returns the point value for a lookup-type category given a raw count.
+function lookupPoints(table, count) {
+  const n = Number(count) || 0;
+  const row = (table || []).find(r =>
+    (r.min == null || n >= r.min) && (r.max == null || n <= r.max)
+  );
+  return row ? row.points : 0;
+}
+
+// Evaluates a simple arithmetic formula string with named variables.
+// Supports: + - * / ( ) and integer/decimal literals. Nothing else.
+function evalFormula(formula, vars) {
+  const expr = (formula || '0').replace(/[a-zA-Z_][a-zA-Z0-9_]*/g, (name) => {
+    if (!(name in vars)) return '0';
+    return String(Number(vars[name]) || 0);
+  });
+  if (!/^[\d\s+\-*/().]+$/.test(expr)) return 0;
+  // eslint-disable-next-line no-new-func
+  try { return Number(new Function(`return (${expr})`)()) || 0; }
+  catch { return 0; }
+}
+
+// Returns the point contribution for one category given its stored value.
+function catScore(cat, val) {
+  switch (cat.type) {
+    case 'boolean': return val ? (cat.value || 0) : 0;
+    case 'lookup':  return lookupPoints(cat.table, val);
+    case 'formula': return evalFormula(cat.formula, val || {});
+    default:        return Number(val) || 0;
+  }
 }
 
 /** Create a DOM element with attributes and children. */
@@ -156,7 +193,7 @@ function addToHistory(state) {
     if (sheet.style === 'categories') {
       return (sheet.categories || []).reduce((sum, cat) => {
         const val = (state.scores[key] || {})[cat.name];
-        return sum + (cat.type === 'boolean' ? (val ? (cat.value || 0) : 0) : (Number(val) || 0));
+        return sum + catScore(cat, val);
       }, 0);
     }
     return (state.rounds || []).reduce((sum, round) => sum + (Number(round[key]) || 0), 0);
@@ -732,7 +769,15 @@ registerView('setup', ({ sheet }) => {
       players.forEach(p => {
         state.scores[p.key] = {};
         sheet.categories.forEach(cat => {
-          state.scores[p.key][cat.name] = cat.type === 'boolean' ? false : 0;
+          if (cat.type === 'boolean') {
+            state.scores[p.key][cat.name] = false;
+          } else if (cat.type === 'formula') {
+            const defaults = {};
+            (cat.inputs || []).forEach(inp => { defaults[inp.key] = 0; });
+            state.scores[p.key][cat.name] = defaults;
+          } else {
+            state.scores[p.key][cat.name] = 0;
+          }
         });
       });
     }
@@ -761,7 +806,7 @@ function renderCategoriesGame(state) {
   const computeTotal = (key) =>
     sheet.categories.reduce((sum, cat) => {
       const val = state.scores[key][cat.name];
-      return sum + (cat.type === 'boolean' ? (val ? (cat.value || 0) : 0) : (Number(val) || 0));
+      return sum + catScore(cat, val);
     }, 0);
 
   const getLeaders = () => {
@@ -810,6 +855,45 @@ function renderCategoriesGame(state) {
           });
           cell.appendChild(cb);
           if (cat.value) cell.appendChild(el('span', { class: 'bool-value' }, `(${cat.value})`));
+        } else if (cat.type === 'lookup') {
+          const input = el('input', {
+            type: 'number', class: 'score-input', value: String(val),
+            min: '0', 'aria-label': `${p.name} — ${cat.name}`,
+          });
+          const badge = el('span', { class: 'computed-pts' }, `= ${lookupPoints(cat.table || [], val)} pts`);
+          input.addEventListener('change', () => {
+            const count = Number(input.value) || 0;
+            state.scores[p.key][cat.name] = count;
+            badge.textContent = `= ${lookupPoints(cat.table || [], count)} pts`;
+            saveGameState(state);
+            render();
+          });
+          cell.appendChild(input);
+          cell.appendChild(badge);
+        } else if (cat.type === 'formula') {
+          const storedObj = (typeof val === 'object' && val !== null) ? val : {};
+          (cat.inputs || []).forEach(inp => {
+            const wrapper = el('div', { class: 'formula-input-row' });
+            wrapper.appendChild(el('span', { class: 'formula-input-label' }, inp.label));
+            const input = el('input', {
+              type: 'number', class: 'score-input formula-input',
+              value: String(storedObj[inp.key] ?? 0),
+              min: inp.min != null ? String(inp.min) : '',
+              max: inp.max != null ? String(inp.max) : '',
+              'aria-label': `${p.name} — ${cat.name} — ${inp.label}`,
+            });
+            input.addEventListener('change', () => {
+              storedObj[inp.key] = Number(input.value) || 0;
+              state.scores[p.key][cat.name] = { ...storedObj };
+              badge.textContent = `= ${evalFormula(cat.formula || '0', state.scores[p.key][cat.name])} pts`;
+              saveGameState(state);
+              render();
+            });
+            wrapper.appendChild(input);
+            cell.appendChild(wrapper);
+          });
+          const badge = el('span', { class: 'computed-pts' }, `= ${evalFormula(cat.formula || '0', storedObj)} pts`);
+          cell.appendChild(badge);
         } else {
           const input = el('input', {
             type: 'number', class: 'score-input', value: String(val),
@@ -1012,7 +1096,7 @@ registerView('results', () => {
     if (sheet.style === 'categories') {
       return sheet.categories.reduce((sum, cat) => {
         const val = state.scores[key][cat.name];
-        return sum + (cat.type === 'boolean' ? (val ? (cat.value || 0) : 0) : (Number(val) || 0));
+        return sum + catScore(cat, val);
       }, 0);
     }
     return (state.rounds || []).reduce((sum, round) => sum + (Number(round[key]) || 0), 0);
@@ -1154,9 +1238,19 @@ registerView('history-detail', ({ id }) => {
       row.appendChild(el('div', { class: 'score-cell cell-label' }, cat.name));
       record.players.forEach(p => {
         const val = (record.scores[p.key] || {})[cat.name];
-        const display = cat.type === 'boolean'
-          ? (val ? `✓ (${cat.value || 0})` : '—')
-          : (val != null ? String(val) : '0');
+        let display;
+        if (cat.type === 'boolean') {
+          display = val ? `✓ (${cat.value || 0})` : '—';
+        } else if (cat.type === 'lookup') {
+          const pts = lookupPoints(cat.table || [], val);
+          display = val != null ? `${val} → ${pts}pts` : '0';
+        } else if (cat.type === 'formula') {
+          const pts = evalFormula(cat.formula || '0', val || {});
+          const parts = (cat.inputs || []).map(inp => `${inp.label}: ${(val || {})[inp.key] ?? 0}`);
+          display = parts.length ? `${parts.join(', ')} = ${pts}pts` : String(pts);
+        } else {
+          display = val != null ? String(val) : '0';
+        }
         row.appendChild(el('div', { class: 'score-cell' }, display));
       });
       table.appendChild(row);
@@ -1399,11 +1493,24 @@ registerView('game-builder', ({ sheetId } = {}) => {
         const typeSelect = el('select', { class: 'cat-type-select', 'aria-label': 'Score type' });
         typeSelect.appendChild(el('option', { value: 'number' }, 'Number'));
         typeSelect.appendChild(el('option', { value: 'boolean' }, 'Checkbox'));
+        typeSelect.appendChild(el('option', { value: 'lookup' },  'Lookup Table'));
+        typeSelect.appendChild(el('option', { value: 'formula' }, 'Formula'));
         typeSelect.value = cat.type || 'number';
         typeSelect.addEventListener('change', () => {
           cat.type = typeSelect.value;
-          if (cat.type === 'boolean') { delete cat.min; delete cat.max; if (cat.value == null) cat.value = 1; }
-          else { delete cat.value; }
+          if (cat.type === 'boolean') {
+            delete cat.min; delete cat.max; delete cat.table; delete cat.inputs; delete cat.formula;
+            if (cat.value == null) cat.value = 1;
+          } else if (cat.type === 'number') {
+            delete cat.value; delete cat.table; delete cat.inputs; delete cat.formula;
+          } else if (cat.type === 'lookup') {
+            delete cat.value; delete cat.min; delete cat.max; delete cat.inputs; delete cat.formula;
+            if (!cat.table) cat.table = [{ points: 0 }];
+          } else if (cat.type === 'formula') {
+            delete cat.value; delete cat.min; delete cat.max; delete cat.table;
+            if (!cat.inputs) cat.inputs = [{ label: '', key: 'a' }, { label: '', key: 'b' }];
+            if (!cat.formula) cat.formula = 'a * b';
+          }
           renderCatRows();
         });
         row.appendChild(typeSelect);
@@ -1416,6 +1523,61 @@ registerView('game-builder', ({ sheetId } = {}) => {
           });
           valIn.addEventListener('input', () => { cat.value = Number(valIn.value) || 0; });
           row.appendChild(valIn);
+        } else if (cat.type === 'lookup') {
+          const tableWrap = el('div', { class: 'lookup-table-editor' });
+          const renderTableRows = () => {
+            tableWrap.innerHTML = '';
+            (cat.table || []).forEach((tableRow, ri) => {
+              const tr = el('div', { class: 'lookup-row' });
+              tr.appendChild(el('span', { class: 'cat-opt-label' }, 'Min'));
+              const minIn = el('input', { type: 'number', class: 'cat-opt-input', placeholder: '—', value: tableRow.min != null ? String(tableRow.min) : '', 'aria-label': 'Range min' });
+              minIn.addEventListener('input', () => { const v = minIn.value.trim(); if (v === '') delete tableRow.min; else tableRow.min = Number(v); });
+              tr.appendChild(minIn);
+              tr.appendChild(el('span', { class: 'cat-opt-label' }, 'Max'));
+              const maxIn = el('input', { type: 'number', class: 'cat-opt-input', placeholder: '—', value: tableRow.max != null ? String(tableRow.max) : '', 'aria-label': 'Range max' });
+              maxIn.addEventListener('input', () => { const v = maxIn.value.trim(); if (v === '') delete tableRow.max; else tableRow.max = Number(v); });
+              tr.appendChild(maxIn);
+              tr.appendChild(el('span', { class: 'cat-opt-label' }, 'Pts'));
+              const ptsIn = el('input', { type: 'number', class: 'cat-opt-input', placeholder: '0', value: tableRow.points != null ? String(tableRow.points) : '0', 'aria-label': 'Points' });
+              ptsIn.addEventListener('input', () => { tableRow.points = Number(ptsIn.value) || 0; });
+              tr.appendChild(ptsIn);
+              tr.appendChild(el('button', { type: 'button', class: 'btn-icon-sm', 'aria-label': 'Remove row', onclick: () => { cat.table.splice(ri, 1); renderTableRows(); } }, '✕'));
+              tableWrap.appendChild(tr);
+            });
+            tableWrap.appendChild(el('button', { type: 'button', class: 'btn btn-ghost btn-sm', onclick: () => { cat.table.push({ points: 0 }); renderTableRows(); } }, '+ Add Range'));
+          };
+          renderTableRows();
+          row.appendChild(tableWrap);
+        } else if (cat.type === 'formula') {
+          const formulaWrap = el('div', { class: 'formula-editor' });
+          formulaWrap.appendChild(el('span', { class: 'cat-opt-label' }, 'Formula'));
+          const fInput = el('input', { type: 'text', class: 'cat-opt-input formula-expr-input', placeholder: 'e.g. a * b', value: cat.formula || '', 'aria-label': 'Formula expression' });
+          fInput.addEventListener('input', () => { cat.formula = fInput.value; });
+          formulaWrap.appendChild(fInput);
+          const inputsWrap = el('div', { class: 'formula-inputs-editor' });
+          const renderFormulaInputs = () => {
+            inputsWrap.innerHTML = '';
+            (cat.inputs || []).forEach((inp, ii) => {
+              const iRow = el('div', { class: 'formula-inp-row' });
+              const labelIn = el('input', { type: 'text', class: 'cat-name-input', placeholder: 'Label…', value: inp.label || '', 'aria-label': 'Input label' });
+              labelIn.addEventListener('input', () => { inp.label = labelIn.value; });
+              iRow.appendChild(labelIn);
+              iRow.appendChild(el('span', { class: 'cat-opt-label' }, 'Key'));
+              const keyIn = el('input', { type: 'text', class: 'cat-opt-input', placeholder: 'a', value: inp.key || '', 'aria-label': 'Variable key' });
+              keyIn.addEventListener('input', () => { inp.key = keyIn.value.replace(/\W/g, ''); });
+              iRow.appendChild(keyIn);
+              iRow.appendChild(el('span', { class: 'cat-opt-label' }, 'Min'));
+              const minIn = el('input', { type: 'number', class: 'cat-opt-input', placeholder: '—', value: inp.min != null ? String(inp.min) : '', 'aria-label': 'Min' });
+              minIn.addEventListener('input', () => { const v = minIn.value.trim(); if (v === '') delete inp.min; else inp.min = Number(v); });
+              iRow.appendChild(minIn);
+              iRow.appendChild(el('button', { type: 'button', class: 'btn-icon-sm', 'aria-label': 'Remove input', onclick: () => { cat.inputs.splice(ii, 1); renderFormulaInputs(); } }, '✕'));
+              inputsWrap.appendChild(iRow);
+            });
+            inputsWrap.appendChild(el('button', { type: 'button', class: 'btn btn-ghost btn-sm', onclick: () => { cat.inputs.push({ label: '', key: `x${cat.inputs.length}` }); renderFormulaInputs(); } }, '+ Add Input'));
+          };
+          renderFormulaInputs();
+          formulaWrap.appendChild(inputsWrap);
+          row.appendChild(formulaWrap);
         } else {
           row.appendChild(el('span', { class: 'cat-opt-label' }, 'Min'));
           const minIn = el('input', {
@@ -1525,11 +1687,26 @@ registerView('game-builder', ({ sheetId } = {}) => {
     if (state.style === 'categories') {
       sheet.categories = state.categories.map(c => {
         const cat = { name: c.name.trim(), type: c.type };
-        if (c.type === 'number') {
+        if (c.type === 'boolean') {
+          cat.value = c.value != null ? c.value : 1;
+        } else if (c.type === 'number') {
           if (c.min !== undefined) cat.min = c.min;
           if (c.max !== undefined) cat.max = c.max;
-        } else {
-          cat.value = c.value != null ? c.value : 1;
+        } else if (c.type === 'lookup') {
+          cat.table = (c.table || []).map(r => {
+            const row = { points: r.points || 0 };
+            if (r.min != null) row.min = r.min;
+            if (r.max != null) row.max = r.max;
+            return row;
+          });
+        } else if (c.type === 'formula') {
+          cat.inputs = (c.inputs || []).map(inp => {
+            const i = { label: inp.label || '', key: inp.key || 'x' };
+            if (inp.min != null) i.min = inp.min;
+            if (inp.max != null) i.max = inp.max;
+            return i;
+          });
+          cat.formula = c.formula || '0';
         }
         return cat;
       });
@@ -1548,6 +1725,20 @@ registerView('game-builder', ({ sheetId } = {}) => {
       if (state.categories.length === 0) { alert('Add at least one scoring category.'); return false; }
       const unnamedIdx = state.categories.findIndex(c => !c.name.trim());
       if (unnamedIdx >= 0) { alert(`Category ${unnamedIdx + 1} needs a name.`); return false; }
+      const badLookup = state.categories.findIndex(
+        c => c.type === 'lookup' && (!Array.isArray(c.table) || c.table.length === 0)
+      );
+      if (badLookup >= 0) {
+        alert(`Category "${state.categories[badLookup].name || 'unnamed'}" needs at least one range row.`);
+        return false;
+      }
+      const badFormula = state.categories.findIndex(
+        c => c.type === 'formula' && (!c.formula || !c.inputs?.length)
+      );
+      if (badFormula >= 0) {
+        alert(`Category "${state.categories[badFormula].name || 'unnamed'}" needs a formula and at least one input.`);
+        return false;
+      }
     }
     return true;
   }

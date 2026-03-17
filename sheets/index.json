@@ -10,6 +10,11 @@
     "name": "Acquire"
   },
   {
+    "id": "agricola",
+    "name": "Agricola",
+    "style": "categories"
+  },
+  {
     "id": "alien-frontiers",
     "name": "Alien Frontiers",
     "style": "categories"

@@ -492,6 +492,29 @@ main {
 }
 .bool-value { font-size: 0.72rem; color: var(--text-muted); margin-left: 0.2rem; }
 
+.computed-pts {
+  font-size: 0.75rem;
+  color: var(--color-muted, #888);
+  display: block;
+  text-align: center;
+  margin-top: 2px;
+}
+
+.formula-input-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.formula-input-label {
+  font-size: 0.7rem;
+  color: var(--color-muted, #888);
+  white-space: nowrap;
+  min-width: 3rem;
+}
+
+
 .game-actions {
   display: flex;
   gap: 0.75rem;
@@ -788,4 +811,34 @@ main {
   flex-direction: column;
   gap: 0.6rem;
   padding-bottom: 1rem;
+}
+
+/* Builder: lookup and formula editors */
+.lookup-table-editor,
+.formula-editor {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.lookup-row,
+.formula-inp-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.formula-expr-input {
+  flex: 1;
+  min-width: 8rem;
+}
+
+.formula-inputs-editor {
+  margin-top: 6px;
+}
+
+.btn-sm {
+  font-size: 0.75rem;
+  padding: 2px 8px;
 }
