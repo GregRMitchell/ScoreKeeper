@@ -10,7 +10,13 @@
     { "name": "Treasury",   "type": "number", "min": 0,   "max": 14  },
     { "name": "Wonders",    "type": "number", "min": 0,   "max": 20  },
     { "name": "Civilian",   "type": "number", "min": 0,   "max": 40  },
-    { "name": "Science",    "type": "number", "min": 0,   "max": 70  },
+    { "name": "Science",    "type": "formula",
+      "inputs": [
+        { "label": "Compasses", "key": "c", "min": 0 },
+        { "label": "Tablets",   "key": "t", "min": 0 },
+        { "label": "Gears",     "key": "g", "min": 0 }
+      ],
+      "formula": "c*c + t*t + g*g + 7*min(c,t,g)" },
     { "name": "Commercial", "type": "number", "min": 0,   "max": 30  },
     { "name": "Guilds",     "type": "number", "min": 0,   "max": 30  }
   ]

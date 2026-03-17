@@ -67,13 +67,10 @@ function lookupPoints(table, count) {
 // Evaluates a simple arithmetic formula string with named variables.
 // Supports: + - * / ( ) and integer/decimal literals. Nothing else.
 function evalFormula(formula, vars) {
-  const expr = (formula || '0').replace(/[a-zA-Z_][a-zA-Z0-9_]*/g, (name) => {
-    if (!(name in vars)) return '0';
-    return String(Number(vars[name]) || 0);
-  });
-  if (!/^[\d\s+\-*/().]+$/.test(expr)) return 0;
+  const keys = Object.keys(vars);
+  const vals = keys.map(k => Number(vars[k]) || 0);
   // eslint-disable-next-line no-new-func
-  try { return Number(new Function(`return (${expr})`)()) || 0; }
+  try { return Number(new Function('min', 'max', ...keys, `return (${formula || '0'})`)(Math.min, Math.max, ...vals)) || 0; }
   catch { return 0; }
 }
 
