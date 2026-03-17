@@ -1,0 +1,7 @@
+{
+  "id": "flamme-rouge",
+  "name": "Flamme Rouge",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "race"
+}

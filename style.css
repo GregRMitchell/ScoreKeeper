@@ -594,8 +594,68 @@ main {
 }
 
 /* ============================================================
-   RESULTS VIEW
+   RACE GAME VIEW
    ============================================================ */
+
+.race-section { margin-bottom: 1rem; }
+
+.race-section-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  padding: 0.5rem 0 0.35rem;
+}
+
+.race-list {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.race-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.race-item:last-child { border-bottom: none; }
+
+.race-position {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  min-width: 2.5rem;
+  flex-shrink: 0;
+}
+
+.race-name {
+  flex: 1;
+  font-weight: 600;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.race-finish-btn { margin-left: auto; flex-shrink: 0; }
+
+.race-item-actions {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.race-history-pos {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  min-width: 3rem;
+}
 .view-results { align-items: stretch; }
 
 .winner-banner {

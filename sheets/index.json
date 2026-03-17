@@ -45,6 +45,11 @@
     "style": "categories"
   },
   {
+    "id": "camel-up",
+    "name": "Camel Up",
+    "style": "race"
+  },
+  {
     "style": "categories",
     "id": "carcassonne",
     "name": "Carcassonne"
@@ -113,6 +118,11 @@
     "style": "categories",
     "id": "fairy-tale",
     "name": "Fairy Tale"
+  },
+  {
+    "id": "flamme-rouge",
+    "name": "Flamme Rouge",
+    "style": "race"
   },
   {
     "id": "forbidden-island",
@@ -223,6 +233,11 @@
     "style": "categories",
     "id": "rialto",
     "name": "Rialto"
+  },
+  {
+    "id": "robo-rally",
+    "name": "Robo Rally",
+    "style": "race"
   },
   {
     "id": "san-juan",

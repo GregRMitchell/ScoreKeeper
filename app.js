@@ -55,6 +55,12 @@ function formatDate(ts) {
   return new Date(ts).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
+function ordinal(n) {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
 // Returns the point value for a lookup-type category given a raw count.
 function lookupPoints(table, count) {
   const n = Number(count) || 0;
@@ -196,17 +202,28 @@ function addToHistory(state) {
     if (sheet.style === 'coop') {
       return (state.outcomes || {})[key] === true ? 1 : 0;
     }
+    if (sheet.style === 'race') {
+      const order = state.raceOrder || [];
+      const pos = order.indexOf(key);
+      // finished players: lower index = better; unfinished = after all finishers
+      return pos === -1 ? state.players.length : pos;
+    }
     return (state.rounds || []).reduce((sum, round) => sum + (Number(round[key]) || 0), 0);
   };
 
   const totals = state.players
     .map(p => ({ name: p.name, key: p.key, total: computeTotal(p.key) }))
-    .sort((a, b) => sheet.scoring === 'lowest' ? a.total - b.total : b.total - a.total);
+    .sort((a, b) => {
+      if (sheet.style === 'race') return a.total - b.total; // ascending: position 0 = 1st
+      return sheet.scoring === 'lowest' ? a.total - b.total : b.total - a.total;
+    });
 
   const topScore = totals[0]?.total;
   const winners  = sheet.style === 'coop'
     ? totals.filter(t => t.total === 1).map(t => t.name)
-    : totals.filter(t => t.total === topScore).map(t => t.name);
+    : sheet.style === 'race'
+      ? (state.raceOrder?.length ? [state.players.find(p => p.key === state.raceOrder[0])?.name].filter(Boolean) : [])
+      : totals.filter(t => t.total === topScore).map(t => t.name);
 
   const record = {
     id:         uid(),
@@ -218,6 +235,7 @@ function addToHistory(state) {
     scores:     state.scores  || {},
     rounds:     state.rounds  || [],
     outcomes:   state.outcomes || {},
+    raceOrder:  state.raceOrder || [],
     categories: sheet.categories || [],
     roundLabel: sheet.rounds?.label || 'Round',
     totals,
@@ -788,7 +806,10 @@ registerView('setup', ({ sheet }) => {
       state.outcomes = {};
       players.forEach(p => { state.outcomes[p.key] = null; });
     }
-    // rounds and race styles start with empty arrays
+    if (sheet.style === 'race') {
+      state.raceOrder = [];
+    }
+    // rounds style starts with an empty rounds array
 
     saveGameState(state);
     navigate('game');
@@ -1078,6 +1099,114 @@ function renderRoundsGame(state) {
 }
 
 // ============================================================
+// GAME VIEW — RACE STYLE
+// ============================================================
+
+function renderRaceGame(state) {
+  const frag = document.createDocumentFragment();
+  frag.appendChild(renderHeader(state.sheet.name, { showHome: true }));
+
+  const main = el('main', { class: 'view-game' });
+  if (!state.raceOrder) state.raceOrder = [];
+
+  const render = () => {
+    main.innerHTML = '';
+
+    const racing   = state.players.filter(p => !state.raceOrder.includes(p.key));
+    const finished = state.raceOrder.map(k => state.players.find(p => p.key === k)).filter(Boolean);
+
+    // Finished section
+    if (finished.length > 0) {
+      const finSection = el('div', { class: 'race-section' });
+      finSection.appendChild(el('h2', { class: 'race-section-title' }, '🏁 Finished'));
+      const finList = el('div', { class: 'race-list' });
+
+      finished.forEach((p, i) => {
+        const item = el('div', { class: 'race-item race-finished-item' });
+
+        const pos = el('span', { class: 'race-position' }, ordinal(i + 1));
+        item.appendChild(pos);
+        item.appendChild(el('span', { class: 'race-name' }, p.name));
+
+        const acts = el('div', { class: 'race-item-actions' });
+        if (i > 0) {
+          acts.appendChild(el('button', {
+            type: 'button', class: 'btn-icon-sm', 'aria-label': 'Move up',
+            onclick: () => {
+              [state.raceOrder[i - 1], state.raceOrder[i]] = [state.raceOrder[i], state.raceOrder[i - 1]];
+              saveGameState(state); render();
+            },
+          }, '↑'));
+        }
+        if (i < finished.length - 1) {
+          acts.appendChild(el('button', {
+            type: 'button', class: 'btn-icon-sm', 'aria-label': 'Move down',
+            onclick: () => {
+              [state.raceOrder[i], state.raceOrder[i + 1]] = [state.raceOrder[i + 1], state.raceOrder[i]];
+              saveGameState(state); render();
+            },
+          }, '↓'));
+        }
+        acts.appendChild(el('button', {
+          type: 'button', class: 'btn-icon-sm btn-remove', 'aria-label': `${p.name} back to racing`,
+          onclick: () => {
+            state.raceOrder.splice(i, 1);
+            saveGameState(state); render();
+          },
+        }, '↩'));
+        item.appendChild(acts);
+        finList.appendChild(item);
+      });
+
+      finSection.appendChild(finList);
+      main.appendChild(finSection);
+    }
+
+    // Still Racing section
+    if (racing.length > 0) {
+      const raceSection = el('div', { class: 'race-section' });
+      raceSection.appendChild(el('h2', { class: 'race-section-title' }, '🏎 Still Racing'));
+      const raceList = el('div', { class: 'race-list' });
+
+      racing.forEach(p => {
+        const item = el('div', { class: 'race-item race-still-item' });
+        item.appendChild(el('span', { class: 'race-name' }, p.name));
+        item.appendChild(el('button', {
+          type: 'button', class: 'btn btn-secondary btn-sm race-finish-btn',
+          'aria-label': `${p.name} finished`,
+          onclick: () => {
+            state.raceOrder.push(p.key);
+            saveGameState(state); render();
+          },
+        }, '🏁 Finished'));
+        raceList.appendChild(item);
+      });
+
+      raceSection.appendChild(raceList);
+      main.appendChild(raceSection);
+    }
+
+    const actions = el('div', { class: 'game-actions' });
+    actions.appendChild(el('button', {
+      class: 'btn btn-primary',
+      onclick: () => {
+        state.finished = true;
+        if (!state.historyId) {
+          state.historyId = addToHistory(state).id;
+        }
+        saveGameState(state);
+        navigate('results');
+      },
+    }, '🏁 Finish Game'));
+    main.appendChild(actions);
+  };
+
+  render();
+  frag.appendChild(main);
+  return frag;
+}
+
+// ============================================================
 // GAME VIEW — CO-OP STYLE
 // ============================================================
 
@@ -1162,6 +1291,7 @@ registerView('game', () => {
   if (state.sheet.style === 'categories') return renderCategoriesGame(state);
   if (state.sheet.style === 'rounds')     return renderRoundsGame(state);
   if (state.sheet.style === 'coop')       return renderCoopGame(state);
+  if (state.sheet.style === 'race')       return renderRaceGame(state);
   return el('p', { class: 'error-msg' }, `Unknown sheet style: "${state.sheet.style}"`);
 });
 
@@ -1400,6 +1530,28 @@ registerView('history-detail', ({ id }) => {
       const badge = el('div', { class: `score-cell coop-history-badge${outcome === true ? ' coop-won-badge' : outcome === false ? ' coop-lost-badge' : ''}` });
       badge.textContent = outcome === true ? '✓ Won' : outcome === false ? '✗ Lost' : '?';
       row.appendChild(badge);
+      table.appendChild(row);
+    });
+
+  } else if (record.sheetStyle === 'race') {
+    const order = record.raceOrder || [];
+    // Finished players in order
+    order.forEach((key, i) => {
+      const p = record.players.find(pl => pl.key === key);
+      if (!p) return;
+      const isWinner = record.winners.includes(p.name);
+      const row = el('div', { class: 'score-row' });
+      row.style.gridTemplateColumns = 'auto 1fr';
+      row.appendChild(el('div', { class: `score-cell race-history-pos${isWinner ? ' leader' : ''}` }, ordinal(i + 1)));
+      row.appendChild(el('div', { class: `score-cell${isWinner ? ' leader' : ''}` }, p.name));
+      table.appendChild(row);
+    });
+    // DNF players
+    record.players.filter(p => !order.includes(p.key)).forEach(p => {
+      const row = el('div', { class: 'score-row' });
+      row.style.gridTemplateColumns = 'auto 1fr';
+      row.appendChild(el('div', { class: 'score-cell race-history-pos' }, 'DNF'));
+      row.appendChild(el('div', { class: 'score-cell' }, p.name));
       table.appendChild(row);
     });
   }

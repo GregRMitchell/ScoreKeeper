@@ -1,0 +1,7 @@
+{
+  "id": "robo-rally",
+  "name": "Robo Rally",
+  "minPlayers": 2,
+  "maxPlayers": 6,
+  "style": "race"
+}
