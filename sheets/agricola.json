@@ -15,10 +15,10 @@
     { "name": "Cattle", "type": "number", "min": -1, "max": 4 },
     { "name": "Unused Farmyard Spaces", "type": "number", "min": -13, "max": 0 },
     { "name": "Fenced Stables", "type": "number", "min": 0, "max": 4 },
-    { "name": "Rooms", "type": "number", "min": 0, "max": 30 },
+    { "name": "House Rooms", "type": "number", "min": 0, "max": 30 },
     { "name": "Family Members", "type": "number", "min": 6, "max": 15 },
-    { "name": "Card Points", "type": "number", "min": -10, "max": 30 },
+    { "name": "Improvements", "type": "number", "min": 0, "max": 30 },
     { "name": "Bonus Points", "type": "number", "min": 0, "max": 30 },
-    { "name": "Begging Cards", "type": "number", "min": -60, "max": 0 }
+    { "name": "Begging Cards", "type": "number", "min": -30, "max": 0 }
   ]
 }
