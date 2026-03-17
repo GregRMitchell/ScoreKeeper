@@ -8,21 +8,42 @@
   "categories": [
     {
       "name": "Color Group 1",
-      "type": "number",
-      "min": 0,
-      "max": 21
+      "type": "lookup",
+      "table": [
+        { "max": 0,           "points": 0  },
+        { "min": 1, "max": 1, "points": 1  },
+        { "min": 2, "max": 2, "points": 3  },
+        { "min": 3, "max": 3, "points": 6  },
+        { "min": 4, "max": 4, "points": 10 },
+        { "min": 5, "max": 5, "points": 15 },
+        { "min": 6,           "points": 21 }
+      ]
     },
     {
       "name": "Color Group 2",
-      "type": "number",
-      "min": 0,
-      "max": 21
+      "type": "lookup",
+      "table": [
+        { "max": 0,           "points": 0  },
+        { "min": 1, "max": 1, "points": 1  },
+        { "min": 2, "max": 2, "points": 3  },
+        { "min": 3, "max": 3, "points": 6  },
+        { "min": 4, "max": 4, "points": 10 },
+        { "min": 5, "max": 5, "points": 15 },
+        { "min": 6,           "points": 21 }
+      ]
     },
     {
       "name": "Color Group 3",
-      "type": "number",
-      "min": 0,
-      "max": 21
+      "type": "lookup",
+      "table": [
+        { "max": 0,           "points": 0  },
+        { "min": 1, "max": 1, "points": 1  },
+        { "min": 2, "max": 2, "points": 3  },
+        { "min": 3, "max": 3, "points": 6  },
+        { "min": 4, "max": 4, "points": 10 },
+        { "min": 5, "max": 5, "points": 15 },
+        { "min": 6,           "points": 21 }
+      ]
     },
     {
       "name": "Penalty Colors",

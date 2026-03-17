@@ -8,10 +8,42 @@
   "categories": [
     { "name": "Buildings",               "type": "number", "min": 0 },
     { "name": "Culture Cards",           "type": "number", "min": 0 },
-    { "name": "Farmers × Farm Track",    "type": "number", "min": 0 },
-    { "name": "Tool Makers × Tool Value","type": "number", "min": 0 },
-    { "name": "Builders × Buildings",    "type": "number", "min": 0 },
-    { "name": "Shamans × People",        "type": "number", "min": 0 },
+    {
+      "name": "Farmers × Farm Track",
+      "type": "formula",
+      "inputs": [
+        { "label": "Farmer Cards", "key": "farmers", "min": 0 },
+        { "label": "Farm Track",   "key": "track",   "min": 0, "max": 8 }
+      ],
+      "formula": "farmers * track"
+    },
+    {
+      "name": "Tool Makers × Tool Value",
+      "type": "formula",
+      "inputs": [
+        { "label": "Tool Maker Cards", "key": "makers", "min": 0 },
+        { "label": "Total Tool Value", "key": "value",  "min": 0, "max": 28 }
+      ],
+      "formula": "makers * value"
+    },
+    {
+      "name": "Builders × Buildings",
+      "type": "formula",
+      "inputs": [
+        { "label": "Builder Cards",  "key": "builders",  "min": 0 },
+        { "label": "Buildings Built","key": "buildings", "min": 0 }
+      ],
+      "formula": "builders * buildings"
+    },
+    {
+      "name": "Shamans × People",
+      "type": "formula",
+      "inputs": [
+        { "label": "Shaman Cards", "key": "shamans", "min": 0 },
+        { "label": "People",       "key": "people",  "min": 2, "max": 7 }
+      ],
+      "formula": "shamans * people"
+    },
     { "name": "Leftover Resources",      "type": "number", "min": 0 }
   ]
 }
