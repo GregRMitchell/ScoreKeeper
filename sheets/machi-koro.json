@@ -1,0 +1,11 @@
+{
+  "id": "machi-koro",
+  "name": "Machi Koro",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "style": "categories",
+  "scoring": "highest",
+  "categories": [
+    { "name": "Landmarks Built", "type": "number", "min": 0, "max": 4 }
+  ]
+}

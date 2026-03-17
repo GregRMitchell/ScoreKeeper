@@ -175,6 +175,11 @@
     "name": "Loony Quest"
   },
   {
+    "id": "machi-koro",
+    "name": "Machi Koro",
+    "style": "categories"
+  },
+  {
     "id": "merchants-marauders",
     "name": "Merchants & Marauders",
     "style": "categories"
