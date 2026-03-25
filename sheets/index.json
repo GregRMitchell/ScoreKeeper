@@ -215,6 +215,11 @@
     "style": "coop"
   },
   {
+    "id": "point-galaxy",
+    "name": "Point Galaxy",
+    "style": "categories"
+  },
+  {
     "style": "categories",
     "id": "port-royal",
     "name": "Port Royal"
