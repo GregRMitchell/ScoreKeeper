@@ -16,7 +16,7 @@
       "name": "Fromagerie: Shelves",
       "type": "lookup",
       "table": [
-        { "max": 1,  "points": 0 },
+        { "max": 1, "points": 0 },
         { "min": 2, "max": 2, "points": 2 },
         { "min": 3, "max": 3, "points": 5 },
         { "min": 4, "max": 4, "points": 9 },
@@ -46,7 +46,12 @@
       "name": "Fruit",
       "type": "formula",
       "inputs": [
-        { "label": "Fruited Cheese", "key": "fruited_cheese", "min": 0, "max": 10 },
+        {
+          "label": "Fruited Cheese",
+          "key": "fruited_cheese",
+          "min": 0,
+          "max": 10
+        },
         { "label": "Jam", "key": "jam", "min": 0, "max": 10 }
       ],
       "formula": "fruited_cheese * jam"
@@ -55,19 +60,22 @@
       "name": "Orders",
       "type": "lookup",
       "table": [
-        { "max": 0,  "points": 0 },
+        { "max": 0, "points": 0 },
         { "min": 1, "max": 1, "points": 1 },
-        { "min": 2, "max": 2, "points": 2 },
-        { "min": 3, "max": 3, "points": 3 },
-        { "min": 4, "max": 4, "points": 5 },
-        { "min": 5, "max": 5, "points": 7 },
-        { "min": 6, "max": 6, "points": 10 },
-        { "min": 7, "max": 7, "points": 14 },
-        { "min": 8, "max": 8, "points": 18 },
-        { "min": 9, "max": 9, "points": 22 },
-        { "min": 10, "max": 10, "points": 26 },
-        { "min": 11, "max": 11, "points": 30 },
-        { "min": 12, "points": 34 }
+        { "min": 2, "max": 2, "points": 3 },
+        { "min": 3, "max": 3, "points": 5 },
+        { "min": 4, "max": 4, "points": 8 },
+        { "min": 5, "max": 5, "points": 11 },
+        { "min": 6, "max": 6, "points": 14 },
+        { "min": 7, "max": 7, "points": 18 },
+        { "min": 8, "max": 8, "points": 22 },
+        { "min": 9, "max": 9, "points": 26 },
+        { "min": 10, "max": 10, "points": 30 },
+        { "min": 11, "max": 11, "points": 34 },
+        { "min": 12, "max": 12, "points": 38 },
+        { "min": 13, "max": 13, "points": 42 },
+        { "min": 14, "max": 14, "points": 46 },
+        { "min": 15, "points": 50 }
       ]
     }
   ]
