@@ -460,6 +460,9 @@ main {
   overflow: visible;
   white-space: normal;
   text-overflow: clip;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
 }
 .cell-player { font-weight: 600; font-size: 0.9rem; }
 .cell-total  { font-weight: 700; font-size: 1.05rem; }
