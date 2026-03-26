@@ -462,7 +462,9 @@ main {
   text-overflow: clip;
   align-self: stretch;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
 }
 .cell-player { font-weight: 600; font-size: 0.9rem; }
 .cell-total  { font-weight: 700; font-size: 1.05rem; }
@@ -524,7 +526,15 @@ main {
   font-size: 0.7rem;
   color: var(--color-muted, #888);
   white-space: nowrap;
-  min-width: 3rem;
+  margin-top: 0.3rem;
+}
+
+.score-input.formula-input {
+  display: block;
+  margin-bottom: 4px;
+}
+.score-input.formula-input:last-child {
+  margin-bottom: 0;
 }
 
 

@@ -870,7 +870,16 @@ function renderCategoriesGame(state) {
     sheet.categories.forEach(cat => {
       const row = el('div', { class: 'score-row' });
       row.style.gridTemplateColumns = colTemplate();
-      row.appendChild(el('div', { class: 'score-cell cell-label' }, cat.name));
+      if (cat.type === 'formula') {
+        const labelCell = el('div', { class: 'score-cell cell-label' });
+        labelCell.appendChild(el('span', {}, cat.name));
+        (cat.inputs || []).forEach(inp => {
+          labelCell.appendChild(el('span', { class: 'formula-input-label' }, inp.label));
+        });
+        row.appendChild(labelCell);
+      } else {
+        row.appendChild(el('div', { class: 'score-cell cell-label' }, cat.name));
+      }
       state.players.forEach(p => {
         const cell = el('div', { class: 'score-cell cell-input' });
         const val  = state.scores[p.key][cat.name];
@@ -904,8 +913,6 @@ function renderCategoriesGame(state) {
         } else if (cat.type === 'formula') {
           const storedObj = (typeof val === 'object' && val !== null) ? val : {};
           (cat.inputs || []).forEach(inp => {
-            const wrapper = el('div', { class: 'formula-input-row' });
-            wrapper.appendChild(el('span', { class: 'formula-input-label' }, inp.label));
             const input = el('input', {
               type: 'number', class: 'score-input formula-input',
               value: String(storedObj[inp.key] ?? 0),
@@ -923,8 +930,7 @@ function renderCategoriesGame(state) {
               saveGameState(state);
               render();
             });
-            wrapper.appendChild(input);
-            cell.appendChild(wrapper);
+            cell.appendChild(input);
           });
           const badge = el('span', { class: 'computed-pts' }, `= ${evalFormula(cat.formula || '0', storedObj)} pts`);
           cell.appendChild(badge);
