@@ -852,11 +852,9 @@ function renderCategoriesGame(state) {
     main.innerHTML = '';
     const leaders = getLeaders();
     const table   = el('div', { class: 'score-table' });
+    table.style.minWidth = `calc(6rem + ${state.players.length} * 5.5rem)`;
 
     // Header
-    const headerRow = el('div', { class: 'score-row score-header' });
-    headerRow.style.gridTemplateColumns = colTemplate();
-    headerRow.appendChild(el('div', { class: 'score-cell cell-label' }, 'Category'));
     state.players.forEach(p => {
       headerRow.appendChild(el('div', {
         class: `score-cell cell-player${leaders.has(p.key) ? ' leader' : ''}`,
@@ -1012,6 +1010,7 @@ function renderRoundsGame(state) {
     main.innerHTML = '';
     const leaders = getLeaders();
     const table   = el('div', { class: 'score-table' });
+    table.style.minWidth = `calc(4rem + ${state.players.length} * 5.5rem + 2rem)`;
 
     // Header
     const headerRow = el('div', { class: 'score-row score-header' });

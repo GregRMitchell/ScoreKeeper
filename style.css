@@ -427,7 +427,6 @@ main {
   display: grid;
   align-items: center;
   border-bottom: 1px solid var(--border);
-  min-width: max-content;
 }
 .score-row:last-child { border-bottom: none; }
 
@@ -453,6 +452,10 @@ main {
   padding-left: 0.75rem;
   font-weight: 500;
   color: var(--text);
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: inherit;
 }
 .cell-player { font-weight: 600; font-size: 0.9rem; }
 .cell-total  { font-weight: 700; font-size: 1.05rem; }
