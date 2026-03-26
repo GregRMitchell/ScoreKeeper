@@ -852,7 +852,8 @@ function renderCategoriesGame(state) {
     main.innerHTML = '';
     const leaders = getLeaders();
     const table   = el('div', { class: 'score-table' });
-    table.style.minWidth = `calc(10rem + ${state.players.length} * 5.5rem)`;
+    const grid    = el('div', { class: 'score-grid' });
+    grid.style.minWidth = `calc(10rem + ${state.players.length} * 5.5rem)`;
 
     // Header
     const headerRow = el('div', { class: 'score-row score-header' });
@@ -863,7 +864,7 @@ function renderCategoriesGame(state) {
         class: `score-cell cell-player${leaders.has(p.key) ? ' leader' : ''}`,
       }, p.name));
     });
-    table.appendChild(headerRow);
+    grid.appendChild(headerRow);
 
     // Category rows
     sheet.categories.forEach(cat => {
@@ -946,7 +947,7 @@ function renderCategoriesGame(state) {
         }
         row.appendChild(cell);
       });
-      table.appendChild(row);
+      grid.appendChild(row);
     });
 
     // Totals row
@@ -958,7 +959,8 @@ function renderCategoriesGame(state) {
         class: `score-cell cell-total${leaders.has(p.key) ? ' leader' : ''}`,
       }, String(computeTotal(p.key))));
     });
-    table.appendChild(totalsRow);
+    grid.appendChild(totalsRow);
+    table.appendChild(grid);
     main.appendChild(table);
 
     // Actions
@@ -1013,7 +1015,8 @@ function renderRoundsGame(state) {
     main.innerHTML = '';
     const leaders = getLeaders();
     const table   = el('div', { class: 'score-table' });
-    table.style.minWidth = `calc(4rem + ${state.players.length} * 5.5rem + 2rem)`;
+    const grid    = el('div', { class: 'score-grid' });
+    grid.style.minWidth = `calc(4rem + ${state.players.length} * 5.5rem + 2rem)`;
 
     // Header
     const headerRow = el('div', { class: 'score-row score-header' });
@@ -1025,7 +1028,7 @@ function renderRoundsGame(state) {
       }, p.name));
     });
     headerRow.appendChild(el('div', { class: 'score-cell' })); // spacer for delete col
-    table.appendChild(headerRow);
+    grid.appendChild(headerRow);
 
     // Round rows
     state.rounds.forEach((round, i) => {
@@ -1054,7 +1057,7 @@ function renderRoundsGame(state) {
         onclick: () => { state.rounds.splice(i, 1); saveGameState(state); render(); },
       }, '✕'));
       row.appendChild(delCell);
-      table.appendChild(row);
+      grid.appendChild(row);
     });
 
     // Totals row
@@ -1067,7 +1070,8 @@ function renderRoundsGame(state) {
       }, String(computeTotal(p.key))));
     });
     totalsRow.appendChild(el('div', { class: 'score-cell' })); // spacer
-    table.appendChild(totalsRow);
+    grid.appendChild(totalsRow);
+    table.appendChild(grid);
     main.appendChild(table);
 
     // Actions
