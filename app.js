@@ -872,10 +872,10 @@ function renderCategoriesGame(state) {
       row.style.gridTemplateColumns = colTemplate();
       if (cat.type === 'formula') {
         const labelCell = el('div', { class: 'score-cell cell-label' });
-        labelCell.appendChild(el('span', {}, cat.name));
         (cat.inputs || []).forEach(inp => {
-          labelCell.appendChild(el('span', { class: 'formula-input-label' }, inp.label));
+          labelCell.appendChild(el('span', { class: 'formula-sub-label' }, inp.label));
         });
+        labelCell.appendChild(el('small', { class: 'formula-cat-footer' }, cat.name));
         row.appendChild(labelCell);
       } else {
         row.appendChild(el('div', { class: 'score-cell cell-label' }, cat.name));

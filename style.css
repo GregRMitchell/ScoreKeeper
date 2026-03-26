@@ -515,25 +515,31 @@ main {
   margin-top: 2px;
 }
 
-.formula-input-row {
+.formula-sub-label {
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  min-height: 36px;
   display: flex;
   align-items: center;
-  gap: 4px;
   margin-bottom: 4px;
 }
+.formula-sub-label:last-of-type {
+  margin-bottom: 0;
+}
 
-.formula-input-label {
-  font-size: 0.7rem;
+.formula-cat-footer {
+  font-size: 0.75rem;
   color: var(--color-muted, #888);
-  white-space: nowrap;
-  margin-top: 0.3rem;
+  display: block;
+  margin-top: 2px;
 }
 
 .score-input.formula-input {
   display: block;
   margin-bottom: 4px;
 }
-.score-input.formula-input:last-child {
+.score-input.formula-input:last-of-type {
   margin-bottom: 0;
 }
 
