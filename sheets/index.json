@@ -120,6 +120,11 @@
     "name": "Fairy Tale"
   },
   {
+    "id": "fromage",
+    "name": "Fromage",
+    "style": "categories"
+  },
+  {
     "id": "flamme-rouge",
     "name": "Flamme Rouge",
     "style": "race"
@@ -128,11 +133,6 @@
     "id": "forbidden-island",
     "name": "Forbidden Island",
     "style": "coop"
-  },
-  {
-    "id": "fromage",
-    "name": "Fromage",
-    "style": "categories"
   },
   {
     "id": "galaxy-trucker",
