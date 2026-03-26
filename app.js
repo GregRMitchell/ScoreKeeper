@@ -846,7 +846,7 @@ function renderCategoriesGame(state) {
   };
 
   const colTemplate = () =>
-    `minmax(6rem, 1.5fr) ${state.players.map(() => '1fr').join(' ')}`;
+    `minmax(6rem, 1.5fr) ${state.players.map(() => 'minmax(5.5rem, 1fr)').join(' ')}`;
 
   const render = () => {
     main.innerHTML = '';
@@ -1006,7 +1006,7 @@ function renderRoundsGame(state) {
 
   const roundLabel  = sheet.rounds?.label || 'Round';
   const colTemplate = () =>
-    `minmax(4rem, auto) ${state.players.map(() => '1fr').join(' ')} 2rem`;
+    `minmax(4rem, auto) ${state.players.map(() => 'minmax(5.5rem, 1fr)').join(' ')} 2rem`;
 
   const render = () => {
     main.innerHTML = '';

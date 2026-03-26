@@ -417,8 +417,6 @@ main {
 .score-table {
   width: 100%;
   overflow-x: auto;
-  overflow-y: auto;
-  max-height: calc(100dvh - 10rem);
   -webkit-overflow-scrolling: touch;
   background: var(--bg-card);
   border-radius: var(--radius);
@@ -429,6 +427,7 @@ main {
   display: grid;
   align-items: center;
   border-bottom: 1px solid var(--border);
+  min-width: max-content;
 }
 .score-row:last-child { border-bottom: none; }
 
