@@ -888,6 +888,7 @@ function renderCategoriesGame(state) {
             type: 'number', class: 'score-input', value: String(val),
             'aria-label': `${p.name} — ${cat.name}`,
           });
+          input.addEventListener('focus', () => input.select());
           const badge = el('span', { class: 'computed-pts' }, `= ${lookupPoints(cat.table || [], val)} pts`);
           input.addEventListener('change', () => {
             const count = Number(input.value) || 0;
@@ -908,6 +909,7 @@ function renderCategoriesGame(state) {
               value: String(storedObj[inp.key] ?? 0),
               'aria-label': `${p.name} — ${cat.name} — ${inp.label}`,
             });
+            input.addEventListener('focus', () => input.select());
             const fv = Number(storedObj[inp.key] ?? 0);
             if ((inp.min != null && fv < inp.min) || (inp.max != null && fv > inp.max)) {
               input.classList.add('out-of-range');
@@ -929,6 +931,7 @@ function renderCategoriesGame(state) {
             type: 'number', class: 'score-input', value: String(val),
             'aria-label': `${p.name} — ${cat.name}`,
           });
+          input.addEventListener('focus', () => input.select());
           const nv = Number(val) || 0;
           if ((cat.min != null && nv < cat.min) || (cat.max != null && nv > cat.max)) {
             input.classList.add('out-of-range');
@@ -1033,6 +1036,7 @@ function renderRoundsGame(state) {
           value: round[p.key] != null ? String(round[p.key]) : '',
           'aria-label': `${p.name} ${roundLabel} ${i + 1}`,
         });
+        input.addEventListener('focus', () => input.select());
         input.addEventListener('change', () => {
           round[p.key] = Number(input.value) || 0;
           saveGameState(state);

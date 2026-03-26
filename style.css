@@ -417,6 +417,8 @@ main {
 .score-table {
   width: 100%;
   overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100dvh - 10rem);
   -webkit-overflow-scrolling: touch;
   background: var(--bg-card);
   border-radius: var(--radius);
