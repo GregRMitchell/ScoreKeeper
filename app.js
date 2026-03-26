@@ -846,13 +846,13 @@ function renderCategoriesGame(state) {
   };
 
   const colTemplate = () =>
-    `minmax(6rem, 1.5fr) ${state.players.map(() => 'minmax(5.5rem, 1fr)').join(' ')}`;
+    `minmax(10rem, 1.5fr) ${state.players.map(() => 'minmax(5.5rem, 1fr)').join(' ')}`;
 
   const render = () => {
     main.innerHTML = '';
     const leaders = getLeaders();
     const table   = el('div', { class: 'score-table' });
-    table.style.minWidth = `calc(6rem + ${state.players.length} * 5.5rem)`;
+    table.style.minWidth = `calc(10rem + ${state.players.length} * 5.5rem)`;
 
     // Header
     const headerRow = el('div', { class: 'score-row score-header' });

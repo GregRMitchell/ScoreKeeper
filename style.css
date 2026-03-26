@@ -427,6 +427,7 @@ main {
   display: grid;
   align-items: center;
   border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
 }
 .score-row:last-child { border-bottom: none; }
 
@@ -454,8 +455,11 @@ main {
   color: var(--text);
   position: sticky;
   left: 0;
-  z-index: 1;
+  z-index: 2;
   background: inherit;
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
 }
 .cell-player { font-weight: 600; font-size: 0.9rem; }
 .cell-total  { font-weight: 700; font-size: 1.05rem; }
