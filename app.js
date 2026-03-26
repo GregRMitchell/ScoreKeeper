@@ -855,6 +855,9 @@ function renderCategoriesGame(state) {
     table.style.minWidth = `calc(6rem + ${state.players.length} * 5.5rem)`;
 
     // Header
+    const headerRow = el('div', { class: 'score-row score-header' });
+    headerRow.style.gridTemplateColumns = colTemplate();
+    headerRow.appendChild(el('div', { class: 'score-cell cell-label' }, 'Category'));
     state.players.forEach(p => {
       headerRow.appendChild(el('div', {
         class: `score-cell cell-player${leaders.has(p.key) ? ' leader' : ''}`,
