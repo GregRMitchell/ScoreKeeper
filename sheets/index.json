@@ -130,6 +130,11 @@
     "style": "coop"
   },
   {
+    "id": "fromage",
+    "name": "Fromage",
+    "style": "categories"
+  },
+  {
     "id": "galaxy-trucker",
     "name": "Galaxy Trucker",
     "style": "rounds"
